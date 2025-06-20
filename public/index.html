@@ -429,7 +429,7 @@
         </div>
         <div class="section payment-section" id="paymentSection" style="display: none;">
             <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: left;">
-                <span style="font-size: 1.2em;">Pague R$ 2.999* via boleto para garantir sua compra</span>
+                <span style="font-size: 1.2em;" id="paymentHeader">Pague R$ 2.999* via boleto para garantir sua compra</span>
                 <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; vertical-align: middle; margin-left: 10px;">
             </div>
             <div class="payment-box" style="background-color: white; padding: 20px; border-radius: 0 0 8px 8px;">
@@ -501,10 +501,11 @@
                     splash.style.display = 'none';
                     document.getElementById('paymentSection').style.display = 'block';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    const paymentHeader = document.getElementById('paymentHeader');
                     if (selectedPayment === 'boleto') {
-                        document.querySelector('.payment-box span').textContent = 'Pague R$ 2.999* via boleto para garantir sua compra';
+                        paymentHeader.textContent = 'Pague R$ 2.999* via boleto para garantir sua compra';
                     } else if (selectedPayment === 'pix') {
-                        document.querySelector('.payment-box span').textContent = 'Pague R$ 2.999* via Pix para garantir sua compra';
+                        paymentHeader.textContent = 'Pague R$ 2.999* via Pix para garantir sua compra';
                     }
                 }, 1500); // Splash por 1,5 segundos
             } else {
