@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-site="ML" data-country="BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolha como pagar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      overflow-y: scroll;
+    }
+    .header {
+      background-color: #fff159;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    .header img {
+      height: 30px;
+    }
+    .content {
+      margin-top: 60px;
+      padding: 20px;
+    }
+    .section {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+    }
+    .back-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.5em;
+      color: #333;
+      text-decoration: none;
+    }
+    .payment-methods label {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 0.95em;
+      background-color: #fff;
+      position: relative;
+    }
+    .payment-methods label:hover {
+      background-color: #f9f9f9;
+    }
+    .payment-methods input[type="radio"] {
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .payment-methods .recommended {
+      background-color: #fff;
+      border-color: #ddd;
+    }
+    .payment-methods .recommended::after {
+      content: 'RECOMENDADO';
+      position: absolute;
+      top: 8px;
+      right: 15px;
+      color: #000;
+      font-size: 0.8em;
+      font-weight: bold;
+      background-color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .payment-methods .method-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    .payment-methods .method-details {
+      flex-grow: 1;
+    }
+    .payment-methods .method-details span:first-child {
+      display: block;
+      color: #333;
+      font-weight: bold;
+    }
+    .payment-methods .method-details span:last-child {
+      display: block;
+      color: #666;
+      font-size: 0.85em;
+    }
+    .coupon-section {
+      padding: 10px 0;
+      margin-top: 10px;
+    }
+    .coupon-section p {
+      color: #3483fa;
+      font-size: 0.9em;
+      margin: 5px 0;
+    }
+    .total-payment {
+      text-align: right;
+      font-weight: bold;
+      padding: 15px;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      margin-top: 15px;
+      font-size: 1.1em;
+    }
+    .btn-confirm {
+      background-color: #3483fa;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      width: 100%;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .btn-confirm:hover {
+      background-color: #2968c8;
+    }
+    .review-section, .payment-section {
+      display: none;
+    }
+    .review-section .billing-info,
+    .review-section .delivery-info,
+    .review-section .product-info {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .review-section .edit-btn {
+      color: #3483fa;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .review-section .delivery-info {
+      display: flex;
+      align-items: center;
+    }
+    .review-section .delivery-info img {
+      max-width: 24px;
+      margin-right: 10px;
+    }
+    .review-section .delivery-info .text {
+      flex-grow: 1;
+    }
+    .review-section .delivery-info .text span {
+      display: block;
+    }
+    .review-section .delivery-info .text span.delivery-date {
+      margin-top: 5px;
+    }
+    .review-section .delivery-info .text span.delivery-date img {
+      margin-left: 5px;
+      vertical-align: middle;
+      max-width: 24px;
+    }
+    .review-section .product-info {
+      display: flex;
+      align-items: flex-start;
+    }
+    .review-section .product-info .text {
+      flex-grow: 1;
+    }
+    .review-section .product-info .payment-icon {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .review-section .product-info img {
+      max-width: 50px;
+      margin-right: 10px;
+    }
+    .review-section .payment-info {
+      display: flex;
+      align-items: center;
+    }
+    .review-section .payment-info img {
+      max-width: 24px;
+      margin-right: 10px;
+    }
+    .review-section .total {
+      text-align: right;
+      font-weight: bold;
+      padding: 10px;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+    }
+    .payment-section {
+      background-color: #00a650;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      min-height: 100vh;
+    }
+    .payment-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+      text-align: left;
+      color: #333;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .payment-box p {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+    .copy-key {
+      margin-top: 20px;
+    }
+    .copy-key input {
+      width: 100%;
+      padding: 8px;
+      font-size: 0.9em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      word-break: break-all;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    .copy-key button {
+      background-color: #3483fa;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 0.9em;
+    }
+    .copy-key button:hover {
+      background-color: #2968c8;
+    }
+    .view-purchases {
+      background-color: #e0e0e0;
+      color: #333;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .view-purchases:hover {
+      background-color: #c0c0c0;
+    }
+    .qr-code {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .qr-code img {
+      max-width: 200px;
+    }
+    #pixDetails p, #boletoDetails p {
+      text-align: center;
+    }
+    .footer {
+      background-color: #f5f5f5;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 0.7em;
+      color: #666;
+      border-top: 1px solid #ddd;
+    }
+    .footer a {
+      color: #333;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .content { padding: 10px; }
+      .section { margin-bottom: 5px; padding: 10px; }
+      .header { height: 40px; }
+      .header img { height: 20px; }
+      .delivery-info, .product-info { flex-direction: column; text-align: center; }
+      .delivery-info img, .product-info img { margin-right: 0; margin-bottom: 10px; }
+      .delivery-info .text span { flex-direction: column; align-items: flex-start; }
+      .delivery-info .text span.delivery-date img { margin-bottom: 5px; order: 0; }
+      .product-info .text { text-align: left; }
+      .payment-info { flex-direction: column; align-items: flex-start; }
+      .payment-info img { margin-bottom: 5px; }
+      .qr-code img { max-width: 150px; }
+      .btn-confirm { font-size: 0.9em; padding: 8px; }
+      .footer { font-size: 0.6em; padding: 5px 10px; }
+      .copy-key input, .copy-key button, .view-purchases { font-size: 0.8em; padding: 6px 12px; }
+      .payment-methods label { padding: 10px; font-size: 0.9em; }
+      .total-payment { font-size: 1em; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="assets/logo.png" alt="Mercado Livre Logo">
+  </div>
+  <div class="content">
+    <a href="#" class="back-btn">←</a>
+    <div class="section payment-choice active" id="paymentChoice">
+      <h2>Escolha como pagar</h2>
+      <div class="payment-methods">
+        <label class="recommended">
+          <input type="radio" name="payment" value="pix" required>
+          <img src="assets/pix.png" alt="Pix Icon" class="method-icon">
+          <div class="method-details">
+            <span>Pix</span>
+            <span>Aprovação imediata</span>
+          </div>
+        </label>
+        <label>
+          <input type="radio" name="payment" value="boleto">
+          <img src="assets/boleto.png" alt="Boleto Icon" class="method-icon">
+          <div class="method-details">
+            <span>Boleto</span>
+            <span>Aprovação em 1 a 2 dias úteis</span>
+          </div>
+        </label>
+        <label>
+          <input type="radio" name="payment" value="card">
+          <img src="assets/cartao.png" alt="Cartão Icon" class="method-icon">
+          <div class="method-details">
+            <span>Cartão</span>
+            <span>Aprovação imediata</span>
+          </div>
+        </label>
+      </div>
+      <div class="coupon-section">
+        <p>Inserir código do cupom</p>
+      </div>
+      <div class="total-payment">
+        Você pagará: <span id="totalValue">R$ 1.999,89</span>
+      </div>
+      <button class="btn-confirm" onclick="reviewPayment()">Revisar Pagamento</button>
+    </div>
+    <div class="section review-section" id="reviewSection" style="display: none;">
+      <h2>Revise e confirme</h2>
+      <div class="billing-info">
+        <img src="assets/faturamento.png" alt="Faturamento Icon" style="vertical-align: middle; max-width: 24px;">
+        <span id="clientName">gael free</span>
+        <span id="clientCPF">CPF 4556790012</span>
+        <p class="edit-btn" onclick="editBilling()">Modificar dados de faturamento</p>
+      </div>
+      <div class="delivery-info">
+        <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
+        <div class="text">
+          <span id="clientAddress">testeim rua de teste Entrega no endereco</span>
+          <span class="delivery-date">Chegará entre os dias <span id="deliveryDate"></span> <img src="assets/full.png" alt="Full Icon" style="max-width: 24px; margin-left: 5px;"></span>
+        </div>
+        <p class="edit-btn" onclick="editDelivery()">Alterar endereço ou escolher outro</p>
+      </div>
+      <div class="product-info">
+        <img id="productPhotoReview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Product Icon" style="max-width: 50px; margin-right: 10px;">
+        <div class="text">
+          <p id="productNameReview">Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V</p>
+          <p>Quantidade: 1</p>
+        </div>
+        <div class="payment-icon" id="paymentIcon"></div>
+        <p class="edit-btn" onclick="editDeliveryDate()">Alterar data de entrega</p>
+      </div>
+      <div class="payment-info" id="paymentInfo">
+        <span></span>
+        <span id="paymentValue">R$ 1.999,89</span>
+      </div>
+      <div class="total">
+        Total: <span id="totalValueReview">R$ 1.999,89</span>
+      </div>
+      <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
+    </div>
+    <div class="section payment-section" id="paymentSection">
+      <h2 id="paymentMethodTitle">Pague R$ 1.999,89 via [Método] para garantir sua compra</h2>
+      <div class="payment-box">
+        <p id="paymentInstruction">Escaneie este código QR ou copie o código abaixo para pagar</p>
+        <div class="qr-code" id="qrCodeContainer">
+          <img id="qrCodeImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Payment QR Code">
+        </div>
+        <div id="pixDetails" style="display: none;">
+          <p>Copie o código Pix abaixo:</p>
+          <div class="copy-key">
+            <input type="text" id="pixCode" value="" readonly>
+            <button onclick="copyToClipboard('pixCode')">Copiar código</button>
+          </div>
+        </div>
+        <div id="boletoDetails" style="display: none;">
+          <p>Baixe o boleto abaixo ou copie a linha digitável:</p>
+          <div class="copy-key">
+            <input type="text" id="boletoLine" value="" readonly>
+            <button onclick="copyToClipboard('boletoLine')">Copiar linha</button>
+          </div>
+          <p>Após pagamento, a aprovação ocorre em 1 a 2 dias úteis.</p>
+        </div>
+        <p><i>Pague e será creditado na hora</i></p>
+        <p>Pague até 08:21 PM -04 de quinta-feira, 19 de junho de 2025.</p>
+        <p><i>Pague agora para garantir sua compra</i></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <a href="#">Trabalhe conosco</a>
+    <a href="#">Termos e condições</a>
+    <a href="#">Promoções</a>
+    <a href="#">Como cuidamos da sua privacidade</a>
+    <a href="#">Acessibilidade</a>
+    <a href="#">Contato</a>
+    <a href="#">Informações sobre seguros</a>
+    <a href="#">Programa de Afiliados</a>
+    <a href="#">Lista de presentes</a>
+    <p>Copyright © 1999-2025 Ebazar.com.br LTDA. CNPJ n° 03.007.331/0001-41 / Av. das Nações Unidas, n° 3.003, Bonfim, Osasco/SP - CEP 06233-903 - empresa do grupo Mercado Livre.</p>
+  </div>
+  <script>
+    function loadClientData() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const clientId = urlParams.get('id');
+      if (clientId) {
+        fetch(`http://localhost:3000/client/${clientId}`)
+          .then(response => {
+            if (!response.ok) throw new Error('Cliente não encontrado');
+            return response.json();
+          })
+          .then(data => {
+            console.log('Dados recebidos no loadClientData:', data); // Log para depuração
+            if (data && typeof data === 'object') {
+              document.getElementById('productPhotoReview').src = data.productPhoto ? `data:image/png;base64,${data.productPhoto}` : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+              document.getElementById('productNameReview').textContent = data.productName || 'Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V';
+              document.getElementById('clientName').textContent = data.name || 'gael free';
+              document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '4556790012'}`;
+              document.getElementById('clientAddress').textContent = data.address || 'testeim rua de teste Entrega no endereco';
+              const total = data.total.replace('.', ',') || '1.999,89';
+              document.getElementById('totalValue').textContent = `R$ ${total}`;
+              document.getElementById('totalValueReview').textContent = `R$ ${total}`;
+              document.getElementById('paymentValue').textContent = `R$ ${total}`;
+              const deliveryDays = data.deliveryDate || '08, 10';
+              document.getElementById('deliveryDate').textContent = deliveryDays.replace(',', ' e ');
+              if (data.qrCode) {
+                document.getElementById('qrCodeImg').src = `data:image/png;base64,${data.qrCode}`;
+              }
+              const boletoLineElement = document.getElementById('boletoLine');
+              if (boletoLineElement) {
+                boletoLineElement.value = data.boletoLine || '';
+              }
+              const pixCodeElement = document.getElementById('pixCode');
+              if (pixCodeElement) {
+                pixCodeElement.value = data.pixCode || '';
+              }
+            } else {
+              console.error('Dados do cliente inválidos ou ausentes');
+            }
+          })
+          .catch(error => console.error('Erro ao carregar dados do cliente:', error.message));
+      }
+    }
+
+    function editBilling() {
+      const name = prompt("Novo nome:", document.getElementById('clientName').textContent);
+      const cpf = prompt("Novo CPF:", document.getElementById('clientCPF').textContent.replace('CPF ', ''));
+      if (name) document.getElementById('clientName').textContent = name;
+      if (cpf) document.getElementById('clientCPF').textContent = `CPF ${cpf}`;
+    }
+
+    function editDelivery() {
+      const address = prompt("Novo endereço:", document.getElementById('clientAddress').textContent);
+      if (address) document.getElementById('clientAddress').textContent = address;
+    }
+
+    function editDeliveryDate() {
+      const days = prompt("Novos dias de entrega (ex.: 08, 10):", document.getElementById('deliveryDate').textContent.replace(' e ', ','));
+      if (days) {
+        const daysArray = days.split(',').map(d => d.trim());
+        if (daysArray.length === 2 && daysArray.every(d => /^\d{1,2}$/.test(d))) {
+          document.getElementById('deliveryDate').textContent = days.replace(',', ' e ');
+        } else {
+          alert('Por favor, insira dois dias válidos separados por vírgula (ex.: 08, 10).');
+        }
+      }
+    }
+
+    function editPayment() {
+      document.getElementById('reviewSection').style.display = 'none';
+      document.getElementById('paymentChoice').style.display = 'block';
+    }
+
+    function reviewPayment() {
+      const selectedPayment = document.querySelector('input[name="payment"]:checked');
+      if (selectedPayment) {
+        document.getElementById('paymentChoice').style.display = 'none';
+        document.getElementById('reviewSection').style.display = 'block';
+      } else {
+        alert('Por favor, selecione um método de pagamento.');
+      }
+    }
+
+    function confirmPurchase() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const clientId = urlParams.get('id');
+      fetch(`http://localhost:3000/client/${clientId}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Cliente não encontrado');
+          return response.json();
+        })
+        .then(data => {
+          console.log('Dados recebidos no confirmPurchase:', data); // Log para depuração
+          const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || '';
+          const title = document.getElementById('paymentMethodTitle');
+          const instruction = document.getElementById('paymentInstruction');
+          const qrCodeContainer = document.getElementById('qrCodeContainer');
+          const pixDetails = document.getElementById('pixDetails');
+          const boletoDetails = document.getElementById('boletoDetails');
+          const paymentInfo = document.getElementById('paymentInfo');
+          const totalValue = document.getElementById('totalValue').textContent;
+          const paymentIcon = document.getElementById('paymentIcon');
+          const boletoLineElement = document.getElementById('boletoLine');
+          const pixCodeElement = document.getElementById('pixCode');
+
+          if (selectedPayment === 'pix') {
+            title.textContent = `Pague ${totalValue} via Pix para garantir sua compra`;
+            instruction.textContent = 'Escaneie este código QR ou copie o código abaixo para pagar';
+            qrCodeContainer.style.display = 'block';
+            pixDetails.style.display = 'block';
+            boletoDetails.style.display = 'none';
+            pixCodeElement.value = data.pixCode || '';
+            paymentInfo.innerHTML = `<img src="assets/pix.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">R$ 1.999,89</span>`;
+            paymentIcon.innerHTML = '';
+          } else if (selectedPayment === 'boleto') {
+            title.textContent = `Pague ${totalValue} via Boleto para garantir sua compra`;
+            instruction.textContent = 'Pague o boleto utilizando os dados abaixo';
+            qrCodeContainer.style.display = 'none';
+            pixDetails.style.display = 'none';
+            boletoDetails.style.display = 'block';
+            boletoLineElement.value = data.boletoLine || '83640000001234567890123456789012345678901234567890';
+            paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">R$ 1.999,89</span>`;
+            paymentIcon.innerHTML = '';
+          } else if (selectedPayment === 'card') {
+            title.textContent = `Pague ${totalValue} via Cartão para garantir sua compra`;
+            instruction.textContent = 'Insira os dados do cartão para pagar';
+            qrCodeContainer.style.display = 'none';
+            pixDetails.style.display = 'none';
+            boletoDetails.style.display = 'none';
+            paymentInfo.innerHTML = `<img src="assets/cartao.png" alt="Cartão Icon" style="max-width: 24px; margin-right: 10px;">Cartão <span id="paymentValue">R$ 1.999,89</span>`;
+            paymentIcon.innerHTML = '';
+          } else {
+            console.error('Método de pagamento não selecionado');
+            return;
+          }
+          document.getElementById('reviewSection').style.display = 'none';
+          document.getElementById('paymentSection').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        })
+        .catch(error => console.error('Erro ao carregar dados do cliente no confirmPurchase:', error.message));
+    }
+
+    function copyToClipboard(elementId) {
+      const paymentKey = document.getElementById(elementId);
+      if (paymentKey) {
+        paymentKey.select();
+        document.execCommand('copy');
+        alert('Código copiado para a área de transferência!');
+      }
+    }
+
+    function viewPurchases() {
+      alert('Redirecionando para minhas compras...');
+    }
+
+    window.onload = loadClientData;
+  </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área Administrativa</title>
+  <style>
+    :root {
+      --primary-color: #00a650;
+      --secondary-color: #f5f5f5;
+      --text-color: #333;
+      --border-color: #ddd;
+      --hover-color: #007b3d;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      overflow-y: auto;
+    }
+
+    .header {
+      background-color: var(--primary-color);
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      height: 40px;
+    }
+
+    .content {
+      margin-top: 70px;
+      padding: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+      color: var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0, 166, 80, 0.2);
+    }
+
+    input[type="file"] {
+      padding: 8px 0;
+    }
+
+    .preview {
+      max-width: 200px;
+      margin-top: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button.primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    button.primary:hover {
+      background-color: var(--hover-color);
+    }
+
+    button.secondary {
+      background-color: #e0e0e0;
+      color: var(--text-color);
+    }
+
+    button.secondary:hover {
+      background-color: #c0c0c0;
+    }
+
+    .link-section {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: var(--secondary-color);
+      border-radius: 6px;
+      display: none;
+    }
+
+    .link-section a {
+      color: var(--primary-color);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .link-section a:hover {
+      text-decoration: underline;
+    }
+
+    .client-list {
+      margin-top: 20px;
+    }
+
+    .client-list a {
+      color: var(--primary-color);
+      margin-right: 10px;
+    }
+
+    .delete-btn {
+      background-color: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .delete-btn:hover {
+      background-color: #cc0000;
+    }
+
+    .login-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .login-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+
+    .login-box input {
+      margin-bottom: 10px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        padding: 10px;
+        margin-top: 60px;
+      }
+
+      .section {
+        padding: 15px;
+      }
+
+      .header img {
+        height: 30px;
+      }
+
+      button {
+        padding: 10px;
+        font-size: 0.9em;
+      }
+
+      .delete-btn {
+        padding: 4px 8px;
+        font-size: 0.9em;
+      }
+
+      .login-box {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="assets/logo.png" alt="Mercado Livre Logo">
+  </div>
+  <div class="content" id="adminContent" style="display: none;">
+    <div class="section">
+      <h2>Gerenciar Cliente</h2>
+      <div class="form-group">
+        <label for="adminName">Nome do Cliente</label>
+        <input type="text" id="adminName" placeholder="Ex.: João Silva" required>
+      </div>
+      <div class="form-group">
+        <label for="adminCPF">CPF</label>
+        <input type="text" id="adminCPF" placeholder="Ex.: 123.456.789-00" required>
+      </div>
+      <div class="form-group">
+        <label for="adminAddress">Endereço de Entrega</label>
+        <input type="text" id="adminAddress" placeholder="Ex.: Rua das Flores, 123" required>
+      </div>
+      <div class="form-group">
+        <label for="adminDeliveryDate">Dias de Entrega (ex.: 08, 10)</label>
+        <input type="text" id="adminDeliveryDate" placeholder="Ex.: 08, 10" required>
+      </div>
+      <div class="form-group">
+        <label for="adminPaymentMethod">Método de Pagamento</label>
+        <select id="adminPaymentMethod" required>
+          <option value="pix">Pix</option>
+          <option value="boleto">Boleto</option>
+          <option value="card">Cartão</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="adminTotal">Valor Total</label>
+        <input type="text" id="adminTotal" placeholder="Ex.: 199.90" required>
+      </div>
+      <div class="form-group">
+        <label for="adminProductName">Nome do Produto</label>
+        <input type="text" id="adminProductName" value="Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V" required>
+      </div>
+      <div class="form-group">
+        <label for="adminProductPhoto">Foto do Produto - PNG</label>
+        <input type="file" id="adminProductPhoto" accept="image/png" onchange="previewImage(event)" required>
+        <img id="preview" class="preview" src="#" alt="Pré-visualização da Foto do Produto" style="display: none;">
+      </div>
+      <div class="form-group">
+        <label for="adminQrCode">Código QR (Pix)</label>
+        <input type="file" id="adminQrCode" accept="image/png" onchange="previewQrCode(event)">
+        <img id="qrPreview" class="preview" src="#" alt="Pré-visualização do QR Code" style="display: none;">
+      </div>
+      <div class="form-group">
+        <label for="adminPixCode">Código Pix</label>
+        <input type="text" id="adminPixCode" placeholder="Ex.: 000201...">
+      </div>
+      <div class="form-group">
+        <label for="adminBoletoLine">Linha Digitável do Boleto</label>
+        <input type="text" id="adminBoletoLine" placeholder="Ex.: 83640000001234567890123456789012345678901234567890">
+      </div>
+      <div class="button-group">
+        <button class="primary" onclick="saveClient(event)">Salvar</button>
+        <button class="secondary" onclick="cancelEdit()">Cancelar</button>
+      </div>
+      <div class="link-section" id="clientLink"></div>
+    </div>
+    <div class="section client-list" id="clientList">
+      <h2>Clientes Cadastrados</h2>
+      <button class="secondary" onclick="deleteAllClients()">Apagar Todos os Clientes</button>
+    </div>
+  </div>
+  <div class="login-section" id="loginSection">
+    <div class="login-box">
+      <h2>Login Administrativo</h2>
+      <div class="form-group">
+        <label for="adminPassword">Senha</label>
+        <input type="password" id="adminPassword" placeholder="Digite a senha" required>
+      </div>
+      <button class="primary" onclick="login()">Entrar</button>
+    </div>
+  </div>
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file && file.type === 'image/png') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+          document.getElementById('preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Por favor, selecione um arquivo PNG.');
+        document.getElementById('preview').style.display = 'none';
+        document.getElementById('adminProductPhoto').value = '';
+      }
+    }
+
+    function previewQrCode(event) {
+      const file = event.target.files[0];
+      if (file && file.type === 'image/png') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('qrPreview').src = e.target.result;
+          document.getElementById('qrPreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Por favor, selecione um arquivo PNG.');
+        document.getElementById('qrPreview').style.display = 'none';
+        document.getElementById('adminQrCode').value = '';
+      }
+    }
+
+    function validateDeliveryDays(daysStr) {
+      const days = daysStr.split(',').map(d => d.trim()).filter(d => d);
+      if (days.length !== 2 || !days.every(d => /^\d{1,2}$/.test(d) && parseInt(d) >= 1 && parseInt(d) <= 31)) {
+        alert('Por favor, insira dois dias válidos separados por vírgula (ex.: 08, 10).');
+        return false;
+      }
+      return true;
+    }
+
+    async function loadClients() {
+      try {
+        const response = await fetch('http://localhost:3000/clients');
+        if (!response.ok) throw new Error('Erro na resposta');
+        const data = await response.json();
+        const clientList = document.getElementById('clientList');
+        clientList.innerHTML = '<h2>Clientes Cadastrados</h2><button class="secondary" onclick="deleteAllClients()">Apagar Todos os Clientes</button>';
+        if (data.length === 0) {
+          clientList.innerHTML += '<p>Nenhum cliente cadastrado.</p>';
+        } else {
+          data.forEach(client => {
+            const link = document.createElement('a');
+            link.href = `http://localhost:3000/index.html?id=${client.id}`;
+            link.textContent = `${client.name} (ID: ${client.id})`;
+            link.target = '_blank';
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'Apagar';
+            deleteBtn.onclick = (e) => {
+              e.preventDefault();
+              if (confirm(`Tem certeza que deseja apagar o cliente ${client.name} (ID: ${client.id})?`)) {
+                deleteClient(client.id);
+              }
+            };
+            const container = document.createElement('div');
+            container.style.display = 'flex';
+            container.style.alignItems = 'center';
+            container.style.marginBottom = '10px';
+            container.appendChild(link);
+            container.appendChild(deleteBtn);
+            clientList.appendChild(container);
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+        document.getElementById('clientList').innerHTML += '<p>Erro ao carregar clientes. Tente novamente.</p>';
+      }
+    }
+
+    async function saveClient(event) {
+      event.preventDefault();
+      const deliveryDays = document.getElementById('adminDeliveryDate').value;
+      console.log('Delivery Days enviado:', deliveryDays);
+      if (!validateDeliveryDays(deliveryDays)) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('adminName').value);
+      formData.append('cpf', document.getElementById('adminCPF').value);
+      formData.append('address', document.getElementById('adminAddress').value);
+      formData.append('deliveryDate', deliveryDays);
+      formData.append('paymentMethod', document.getElementById('adminPaymentMethod').value);
+      formData.append('total', document.getElementById('adminTotal').value);
+      formData.append('productName', document.getElementById('adminProductName').value);
+      formData.append('productPhoto', document.getElementById('adminProductPhoto').files[0] || '');
+      formData.append('qrCode', document.getElementById('adminQrCode').files[0] || '');
+      formData.append('pixCode', document.getElementById('adminPixCode').value);
+      formData.append('boletoLine', document.getElementById('adminBoletoLine').value);
+
+      if (!document.getElementById('adminName').value || !document.getElementById('adminCPF').value || !document.getElementById('adminAddress').value || !deliveryDays || !document.getElementById('adminPaymentMethod').value || !document.getElementById('adminTotal').value || !document.getElementById('adminProductName').value || !document.getElementById('adminProductPhoto').files[0]) {
+        alert('Todos os campos obrigatórios devem ser preenchidos.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/client', {
+          method: 'POST',
+          body: formData
+        });
+        if (!response.ok) throw new Error(`Erro na requisição: ${response.statusText}`);
+        const data = await response.json();
+        if (data.success) {
+          document.getElementById('adminName').value = '';
+          document.getElementById('adminCPF').value = '';
+          document.getElementById('adminAddress').value = '';
+          document.getElementById('adminDeliveryDate').value = '';
+          document.getElementById('adminPaymentMethod').value = 'pix';
+          document.getElementById('adminTotal').value = '';
+          document.getElementById('adminProductName').value = 'Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V';
+          document.getElementById('preview').style.display = 'none';
+          document.getElementById('qrPreview').style.display = 'none';
+          document.getElementById('adminPixCode').value = '';
+          document.getElementById('adminBoletoLine').value = '';
+          const linkSection = document.getElementById('clientLink');
+          linkSection.innerHTML = `<p>Link para o cliente: <a href="http://localhost:3000/index.html?id=${data.clientId}" target="_blank">http://localhost:3000/index.html?id=${data.clientId}</a></p>`;
+          linkSection.style.display = 'block';
+          loadClients();
+        } else {
+          throw new Error(data.error || 'Falha ao salvar cliente');
+        }
+      } catch (error) {
+        console.error('Erro ao salvar cliente:', error.message);
+        alert('Erro ao salvar cliente. Verifique os dados e tente novamente.');
+      }
+    }
+
+    async function deleteClient(clientId) {
+      try {
+        const response = await fetch(`http://localhost:3000/client/${clientId}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Erro ao apagar cliente');
+        loadClients();
+      } catch (error) {
+        console.error('Erro ao apagar cliente:', error);
+        alert('Erro ao apagar cliente. Tente novamente.');
+      }
+    }
+
+    async function deleteAllClients() {
+      if (confirm('Tem certeza que deseja apagar todos os clientes? Essa ação não pode ser desfeita.')) {
+        try {
+          const response = await fetch('http://localhost:3000/clients', {
+            method: 'DELETE'
+          });
+          if (!response.ok) throw new Error('Erro ao apagar todos os clientes');
+          loadClients();
+        } catch (error) {
+          console.error('Erro ao apagar todos os clientes:', error);
+          alert('Erro ao apagar todos os clientes. Tente novamente.');
+        }
+      }
+    }
+
+    function cancelEdit() {
+      document.getElementById('adminName').value = '';
+      document.getElementById('adminCPF').value = '';
+      document.getElementById('adminAddress').value = '';
+      document.getElementById('adminDeliveryDate').value = '';
+      document.getElementById('adminPaymentMethod').value = 'pix';
+      document.getElementById('adminTotal').value = '';
+      document.getElementById('adminProductName').value = 'Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V';
+      document.getElementById('preview').style.display = 'none';
+      document.getElementById('qrPreview').style.display = 'none';
+      document.getElementById('adminPixCode').value = '';
+      document.getElementById('adminBoletoLine').value = '';
+      document.getElementById('clientLink').style.display = 'none';
+    }
+
+    function login() {
+      const password = document.getElementById('adminPassword').value;
+      const correctPassword = 'admin123'; // Senha hardcoded (ajuste conforme necessário)
+      if (password === correctPassword) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        loadClients();
+      } else {
+        alert('Senha incorreta. Tente novamente.');
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+
+    window.onload = function() {
+      // Exibe a tela de login ao carregar
+      document.getElementById('loginSection').style.display = 'flex';
+    };
+  </script>
+</body>
+</html>
