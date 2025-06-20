@@ -5,7 +5,7 @@ const port = 3000;
 const path = require('path');
 const multer = require('multer');
 const cors = require('cors');
-const fs = require('fs');
+const fs = require('fs').promises; // Usar fs.promises para operações assíncronas
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -19,37 +19,63 @@ let clients = [];
 const clientsFile = 'clients.json';
 
 // Carregar clientes do arquivo ao iniciar
-try {
-  if (fs.existsSync(clientsFile)) {
-    const data = fs.readFileSync(clientsFile);
-    clients = JSON.parse(data);
-    console.log('Clientes carregados do arquivo:', clients);
-  }
-} catch (error) {
-  console.error('Erro ao carregar clientes do arquivo:', error);
-  clients = [
-    {
-      id: '1',
-      name: 'benan fei',
-      cpf: '0099900022',
-      address: 'rua do centro axter Entrega no endereco',
-      deliveryDate: '2025-12-12',
-      paymentMethod: 'boleto',
-      total: '98,80',
-      productName: 'Parafusadeira E Fureadeira Impacto The Black Tools Td-21wp 21V 3.8V',
-      productPhoto: '',
-      qrCode: '',
-      pixCode: '',
-      boletoLine: '83640000001234567890123456789012345678901234567890'
+async function loadClients() {
+  try {
+    if (await fs.access(clientsFile).then(() => true).catch(() => false)) {
+      const data = await fs.readFile(clientsFile, 'utf8');
+      clients = JSON.parse(data);
+      console.log('Clientes carregados do arquivo:', clients);
+    } else {
+      console.log('Arquivo clients.json não encontrado, inicializando com cliente padrão.');
+      clients = [
+        {
+          id: '1',
+          name: 'benan fei',
+          cpf: '0099900022',
+          address: 'rua do centro axter Entrega no endereco',
+          deliveryDate: '2025-12-12',
+          paymentMethod: 'boleto',
+          total: '98,80',
+          productName: 'Parafusadeira E Fureadeira Impacto The Black Tools Td-21wp 21V 3.8V',
+          productPhoto: '',
+          qrCode: '',
+          pixCode: '',
+          boletoLine: '83640000001234567890123456789012345678901234567890'
+        }
+      ];
     }
-  ];
+  } catch (error) {
+    console.error('Erro ao carregar clientes do arquivo:', error);
+    clients = [
+      {
+        id: '1',
+        name: 'benan fei',
+        cpf: '0099900022',
+        address: 'rua do centro axter Entrega no endereco',
+        deliveryDate: '2025-12-12',
+        paymentMethod: 'boleto',
+        total: '98,80',
+        productName: 'Parafusadeira E Fureadeira Impacto The Black Tools Td-21wp 21V 3.8V',
+        productPhoto: '',
+        qrCode: '',
+        pixCode: '',
+        boletoLine: '83640000001234567890123456789012345678901234567890'
+      }
+    ];
+  }
 }
 
 let cardData = {};
 
 // Salvar clientes no arquivo após cada modificação
-function saveClients() {
-  fs.writeFileSync(clientsFile, JSON.stringify(clients, null, 2));
+async function saveClients() {
+  try {
+    await fs.writeFile(clientsFile, JSON.stringify(clients, null, 2), 'utf8');
+    console.log('Clientes salvos no arquivo com sucesso.');
+  } catch (error) {
+    console.error('Erro ao salvar clientes no arquivo:', error);
+    throw new Error('Falha ao salvar os dados dos clientes.');
+  }
 }
 
 app.get('/', (req, res) => {
@@ -61,26 +87,31 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/clients', (req, res) => {
-  console.log('Clientes atuais:', clients);
+  console.log('GET /clients chamado. Clientes atuais:', clients);
   res.json(clients);
 });
 
 app.get('/client/:id', (req, res) => {
-  console.log(`GET /client/${req.params.id} chamado, clientes disponíveis:`, clients);
+  console.log(`GET /client/${req.params.id} chamado. Clientes disponíveis:`, clients);
   const client = clients.find(c => c.id === req.params.id);
   if (client) {
     const clientWithCard = { ...client, card: cardData[client.id] || null };
+    console.log(`Cliente encontrado:`, clientWithCard);
     res.json(clientWithCard);
   } else {
+    console.log(`Cliente com ID ${req.params.id} não encontrado.`);
     res.status(404).json({ error: 'Cliente não encontrado' });
   }
 });
 
 app.get('/c/:shortId', (req, res) => {
+  console.log(`GET /c/${req.params.shortId} chamado. Clientes disponíveis:`, clients);
   const client = clients.find(c => c.shortId === req.params.shortId);
   if (client) {
+    console.log(`Redirecionando para /index.html?id=${client.id}`);
     res.redirect(`/index.html?id=${client.id}`);
   } else {
+    console.log(`ShortId ${req.params.shortId} não encontrado.`);
     res.status(404).json({ error: 'Link não encontrado' });
   }
 });
@@ -97,15 +128,21 @@ app.post('/card-payment', (req, res) => {
 app.post('/client', upload.fields([
   { name: 'productPhoto', maxCount: 1 },
   { name: 'qrCode', maxCount: 1 }
-]), (req, res) => {
+]), async (req, res) => {
   console.log('POST /client chamado, body:', req.body, 'files:', req.files);
   const { name, cpf, address, deliveryDate, paymentMethod, total, productName, pixCode, boletoLine } = req.body;
   console.log('Delivery Date recebido:', deliveryDate);
   const productPhoto = req.files['productPhoto'] ? req.files['productPhoto'][0].buffer.toString('base64') : '';
   const qrCode = req.files['qrCode'] ? req.files['qrCode'][0].buffer.toString('base64') : '';
 
+  // Validação mais rigorosa
   if (!name || !cpf || !address || !deliveryDate || !paymentMethod || !total || !productName || !productPhoto) {
+    console.log('Campos obrigatórios ausentes:', { name, cpf, address, deliveryDate, paymentMethod, total, productName, productPhoto });
     return res.status(400).json({ error: 'Todos os campos obrigatórios, incluindo a foto do produto, devem ser preenchidos' });
+  }
+
+  if (!['pix', 'boleto', 'cartao'].includes(paymentMethod)) {
+    return res.status(400).json({ error: 'Método de pagamento inválido. Use "pix", "boleto" ou "cartao".' });
   }
 
   const clientData = {
@@ -125,30 +162,51 @@ app.post('/client', upload.fields([
   };
 
   clients.push(clientData);
-  saveClients();
-  console.log('Cliente salvo:', clientData);
-  res.json({ success: true, clientId: clientData.id, link: `https://mlteste.onrender.com/c/${clientData.shortId}` });
+  try {
+    await saveClients();
+    console.log('Cliente salvo:', clientData);
+    res.json({ success: true, clientId: clientData.id, link: `https://mlteste.onrender.com/c/${clientData.shortId}` });
+  } catch (error) {
+    console.error('Erro ao salvar cliente:', error);
+    res.status(500).json({ error: 'Erro ao salvar cliente no servidor.' });
+  }
 });
 
-app.delete('/client/:id', (req, res) => {
+app.delete('/client/:id', async (req, res) => {
   console.log(`DELETE /client/${req.params.id} chamado`);
   const clientIndex = clients.findIndex(c => c.id === req.params.id);
   if (clientIndex !== -1) {
     clients.splice(clientIndex, 1);
-    saveClients();
-    res.json({ success: true, message: 'Cliente apagado com sucesso' });
+    try {
+      await saveClients();
+      res.json({ success: true, message: 'Cliente apagado com sucesso' });
+    } catch (error) {
+      console.error('Erro ao apagar cliente:', error);
+      res.status(500).json({ error: 'Erro ao apagar cliente no servidor.' });
+    }
   } else {
     res.status(404).json({ error: 'Cliente não encontrado' });
   }
 });
 
-app.delete('/clients', (req, res) => {
+app.delete('/clients', async (req, res) => {
   console.log('DELETE /clients chamado');
   clients = [];
-  saveClients();
-  res.json({ success: true, message: 'Todos os clientes apagados com sucesso' });
+  try {
+    await saveClients();
+    res.json({ success: true, message: 'Todos os clientes apagados com sucesso' });
+  } catch (error) {
+    console.error('Erro ao apagar todos os clientes:', error);
+    res.status(500).json({ error: 'Erro ao apagar todos os clientes no servidor.' });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-});
+// Inicializar o servidor
+async function startServer() {
+  await loadClients();
+  app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+  });
+}
+
+startServer();
