@@ -334,10 +334,9 @@
       <h2>Revise e confirme</h2>
       <div class="billing-info">
         <img src="assets/faturamento.png" alt="Faturamento Icon" style="max-width: 24px; margin-right: 10px;">
-        <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
         <div class="text">
           <span id="clientName">eu mesmo validando</span>
-          <span id="clientCPF">CPF 000.000.999-</span>
+          <span id="clientCPF">CPF 000.000.999-11</span>
         </div>
       </div>
       <div class="delivery-info">
@@ -418,7 +417,7 @@
             console.log('Dados recebidos no loadClientData:', data); // Log para depuração
             if (data && typeof data === 'object') {
               document.getElementById('clientName').textContent = data.name || 'eu mesmo validando';
-              document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '000.000.999-'}`;
+              document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '000.000.999-11'}`;
               document.getElementById('clientAddress').textContent = data.address || 'rua da quinta 25 centro';
               const total = data.total.replace('.', ',') || '10,99';
               document.getElementById('totalValue').textContent = `R$ ${total}`;
