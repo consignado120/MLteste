@@ -370,7 +370,7 @@
         } else {
           data.forEach(client => {
             const link = document.createElement('a');
-            link.href = `https://mlteste.onrender.com/index.html?id=${client.id}`;
+            link.href = `https://mlteste.onrender.com/c/${client.shortId}`; // Usando shortId para link encurtado
             link.textContent = `${client.name} (ID: ${client.id})`;
             link.target = '_blank';
             const deleteBtn = document.createElement('button');
@@ -443,7 +443,7 @@
           document.getElementById('adminPixCode').value = '';
           document.getElementById('adminBoletoLine').value = '';
           const linkSection = document.getElementById('clientLink');
-          linkSection.innerHTML = `<p>Link para o cliente: <a href="https://mlteste.onrender.com/index.html?id=${data.clientId}" target="_blank">https://mlteste.onrender.com/index.html?id=${data.clientId}</a></p>`;
+          linkSection.innerHTML = `<p>Link para o cliente: <a href="${data.link}" target="_blank">${data.link}</a></p>`; // Usando o link encurtado retornado
           linkSection.style.display = 'block';
           linkSection.scrollIntoView({ behavior: 'smooth' });
           loadClients();
