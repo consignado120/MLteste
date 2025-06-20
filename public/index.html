@@ -458,7 +458,9 @@
         async function loadClientData(clientId) {
             try {
                 const response = await fetch(`https://mlteste.onrender.com/client/${clientId}`);
-                if (!response.ok) throw new Error('Cliente não encontrado');
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+                }
                 const client = await response.json();
 
                 // Preencher os dados na seção de escolha de pagamento
@@ -481,18 +483,27 @@
                 // Configurar a seção de pagamento
                 function updatePaymentSection() {
                     const paymentHeader = document.getElementById('paymentHeader');
+                    const paymentMethodText = document.getElementById('paymentMethod'); // Definido corretamente
                     if (client.paymentMethod === 'boleto') {
                         paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Boleto para garantir sua compra`;
+                        paymentMethodText.textContent = 'Boleto Bancário';
+                        document.getElementById('paymentIconReview').src = 'assets/boleto.png';
                     } else if (client.paymentMethod === 'pix') {
                         paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Pix para garantir sua compra`;
+                        paymentMethodText.textContent = 'Pix';
+                        document.getElementById('paymentIconReview').src = 'assets/pix.png';
                     } else if (client.paymentMethod === 'cartao') {
                         paymentHeader.textContent = `Pague R$ ${client.total || '2.999'}* via Cartão para garantir sua compra`;
+                        paymentMethodText.textContent = 'Cartão de Crédito';
+                        document.getElementById('paymentIconReview').src = 'assets/cartao.png';
                     }
                     paymentHeader.innerHTML += ' <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">';
 
                     // Atualizar QR Code e Pix Code
                     if (client.qrCode && client.paymentMethod === 'pix') {
                         document.getElementById('qrCodeImage').src = `data:image/png;base64,${client.qrCode}`;
+                    } else {
+                        document.getElementById('qrCodeImage').src = 'assets/qrcode.png'; // Fallback
                     }
                     if (client.pixCode && client.paymentMethod === 'pix') {
                         document.getElementById('pixCodeInput').value = client.pixCode;
@@ -507,19 +518,6 @@
                 const paymentRadio = document.querySelector(`input[name="payment"][value="${client.paymentMethod || 'pix'}"]`);
                 if (paymentRadio) paymentRadio.checked = true;
 
-                // Atualizar ícone de pagamento na revisão
-                const paymentIconReview = document.getElementById('paymentIconReview');
-                if (client.paymentMethod === 'pix') {
-                    paymentIconReview.src = 'assets/pix.png';
-                    paymentMethodText.textContent = 'Pix';
-                } else if (client.paymentMethod === 'boleto') {
-                    paymentIconReview.src = 'assets/boleto.png';
-                    paymentMethodText.textContent = 'Boleto Bancário';
-                } else if (client.paymentMethod === 'cartao') {
-                    paymentIconReview.src = 'assets/cartao.png';
-                    paymentMethodText.textContent = 'Cartão de Crédito';
-                }
-
                 // Adicionar listener para atualizar a seção de pagamento ao mudar o método
                 document.querySelectorAll('input[name="payment"]').forEach(radio => {
                     radio.addEventListener('change', updatePaymentSection);
@@ -528,7 +526,7 @@
                 updatePaymentSection();
             } catch (error) {
                 console.error('Erro ao carregar dados do cliente:', error);
-                alert('Erro ao carregar os dados do cliente. Verifique o link ou tente novamente.');
+                alert(`Erro ao carregar os dados do cliente. ${error.message}. Verifique o link ou tente novamente.`);
             }
         }
 
@@ -596,7 +594,7 @@
         }
 
         function copyToClipboard() {
-            const input = document.queryId('pixCodeInput');
+            const input = document.getElementById('pixCodeInput');
             input.select();
             document.execCommand('copy');
             alert('Código copiado! Prossiga com o pagamento.');
