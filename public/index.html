@@ -397,14 +397,14 @@
                 </div>
             </div>
             <div class="product-info">
-                <img id="productPhotoReview" src="assets/boleto.png" alt="Product Icon"> <!-- Placeholder temporário -->
+                <img id="productPhotoReview" src="assets/shopping_bag.png" alt="Product Icon">
                 <div class="text">
                     <p id="productNameReview">Produto Exemplo</p>
                     <p>Quantidade: 1</p>
                 </div>
                 <div class="payment-icon" id="paymentIcon"></div>
             </div>
-            <div class="payment-info" id="paymentInfo"> <!-- Garantindo o ID -->
+            <div class="payment-info" id="paymentInfo">
                 <img src="" alt="Payment Icon" id="paymentIconReview">
                 <span id="paymentMethod">Método de Pagamento</span>
                 <span id="paymentValue">R$ 2.999,00</span>
@@ -414,27 +414,32 @@
             </div>
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
-        <div class="section payment-section" id="paymentSection">
+        <div class="section payment-section" id="paymentSection" style="display: none;">
             <h2 id="paymentMethodTitle">Confirme a sua compra</h2>
             <div class="payment-box">
                 <img src="assets/logo.png" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
-                <p>Envio #1 FULL</p>
-                <p>Chegou no seu endereço amanhã</p>
-                <h3>Mesa de jantar 10 cadeiras madeira maciça peroba rosa linda</h3>
-                <p>Cor: Padrão</p>
-                <p>Quantidade: 100</p>
+                <p>Pague R$ 2.999* via Pix para esta compra</p>
                 <div style="display: flex; align-items: center; margin: 10px 0;">
                     <img src="assets/pix.png" alt="Pix Icon" style="width: 24px; margin-right: 10px;">
-                    <span>Pix R$ 2.999*</span>
+                    <span>Pix</span>
                 </div>
-                <p>Não foi realizado este o pagamento até agora. Não há tempo para aprovação. Não há percentagem de aprovação.</p>
-                <p>Alterar meio de pagamento</p>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
+                <div>
+                    <p>Copie o código para pagar</p>
+                    <ol style="padding-left: 20px; font-size: 0.9em;">
+                        <li>Acesse seu Internet Banking ou app de pagamentos.</li>
+                        <li>Escolha via Pix.</li>
+                        <li>Cole o seguinte código:</li>
+                    </ol>
+                    <div class="qr-code">
+                        <img src="assets/shopping_bag.png" alt="QR Code" style="max-width: 200px;"> <!-- Placeholder para QR Code -->
+                    </div>
+                    <div class="copy-key">
+                        <input type="text" id="paymentKey" value="000212600014bchbpx010" readonly>
+                        <button onclick="copyToClipboard('paymentKey')">Copiar código</button>
+                    </div>
                 </div>
-                <p style="font-size: 0.8em; color: #666; margin-top: 20px;">Marcos Roberto Floreze Goetten</p>
-                <p style="font-size: 0.8em; color: #666;">CPF .......</p>
-                <p style="font-size: 0.8em; color: #666;">Editar dados</p>
+                <p>Pague até 12 horas</p>
+                <button class="btn-confirm" onclick="window.location.href='finalizar/pix'">Confirmar pagamento</button>
             </div>
         </div>
     </div>
@@ -474,36 +479,12 @@
         }
 
         function confirmPurchase() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'pix'; // Default to Pix if none selected
-            const title = document.getElementById('paymentMethodTitle');
-            const paymentBox = document.querySelector('.payment-box');
-            const totalValue = document.getElementById('totalValue').textContent;
-
-            title.textContent = 'Confirme a sua compra';
-            paymentBox.innerHTML = `
-                <img src="assets/logo.png" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
-                <p>Envio #1 FULL</p>
-                <p>Chegou no seu endereço amanhã</p>
-                <h3>Mesa de jantar 10 cadeiras madeira maciça peroba rosa linda</h3>
-                <p>Cor: Padrão</p>
-                <p>Quantidade: 100</p>
-                <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <img src="assets/${selectedPayment}.png" alt="${selectedPayment.charAt(0).toUpperCase() + selectedPayment.slice(1)} Icon" style="width: 24px; margin-right: 10px;">
-                    <span>${selectedPayment.charAt(0).toUpperCase() + selectedPayment.slice(1)} ${totalValue}*</span>
-                </div>
-                <p>Não foi realizado este o pagamento até agora. Não há tempo para aprovação. Não há percentagem de aprovação.</p>
-                <p>Alterar meio de pagamento</p>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
-                </div>
-                <p style="font-size: 0.8em; color: #666; margin-top: 20px;">Marcos Roberto Floreze Goetten</p>
-                <p style="font-size: 0.8em; color: #666;">CPF .......</p>
-                <p style="font-size: 0.8em; color: #666;">Editar dados</p>
-            `;
-
-            document.getElementById('reviewSection').style.display = 'none';
-            document.getElementById('paymentSection').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'pix';
+            if (selectedPayment === 'pix') {
+                window.location.href = 'finalizar/pix';
+            } else {
+                alert('Apenas pagamento via Pix está configurado para redirecionamento no momento.');
+            }
         }
 
         function copyToClipboard(elementId) {
