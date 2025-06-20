@@ -428,15 +428,15 @@
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
         <div class="section payment-section" id="paymentSection" style="display: none;">
-            <div class="payment-box" style="background-color: #00a650; color: white; padding: 10px; border-radius: 8px 8px 0 0;">
-                <h2 style="margin: 0;">Pague R$ 2.999* via boleto para garantir sua compra</h2>
-                <img src="assets/boleto.png" alt="Boleto Icon" style="width: 24px; vertical-align: middle; margin-left: 10px;">
+            <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: left;">
+                <span style="font-size: 1.2em;">Pague R$ 2.999* via boleto para garantir sua compra</span>
+                <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; vertical-align: middle; margin-left: 10px;">
             </div>
             <div class="payment-box" style="background-color: white; padding: 20px; border-radius: 0 0 8px 8px;">
                 <p>Copie este código para pagar</p>
                 <ol style="padding-left: 20px; font-size: 0.9em;">
                     <li>Acesse seu Internet Banking ou app de pagamentos.</li>
-                    <li>Escolha via Pix.</li>
+                    <li>Escolha pagar via Pix.</li>
                     <li>Cole o seguinte código:</li>
                 </ol>
                 <div class="qr-code">
@@ -449,7 +449,7 @@
                 <p>Pague até 12 horas</p>
                 <div>
                     <input type="checkbox" id="instantPayment">
-                    <label for="instantPayment">Pague e seja creditado na hora</label>
+                    <label for="instantPayment">Pague e será creditado na hora</label>
                 </div>
                 <button class="btn-confirm" onclick="confirmPayment()">Copiar código</button>
             </div>
@@ -502,9 +502,9 @@
                     document.getElementById('paymentSection').style.display = 'block';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     if (selectedPayment === 'boleto') {
-                        document.querySelector('.payment-box h2').textContent = 'Pague R$ 2.999* via boleto para garantir sua compra';
+                        document.querySelector('.payment-box span').textContent = 'Pague R$ 2.999* via boleto para garantir sua compra';
                     } else if (selectedPayment === 'pix') {
-                        document.querySelector('.payment-box h2').textContent = 'Pague R$ 2.999* via Pix para garantir sua compra';
+                        document.querySelector('.payment-box span').textContent = 'Pague R$ 2.999* via Pix para garantir sua compra';
                     }
                 }, 1500); // Splash por 1,5 segundos
             } else {
