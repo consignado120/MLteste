@@ -252,6 +252,21 @@
         #pixDetails p, #boletoDetails p {
             text-align: center;
         }
+        .splash-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 166, 80, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+        }
         .footer {
             background-color: #f5f5f5;
             padding: 10px 20px;
@@ -302,6 +317,7 @@
             .copy-key input, .copy-key button, .view-purchases { font-size: 0.8em; padding: 6px 12px; }
             .payment-methods label { padding: 10px; font-size: 0.9em; }
             .total-payment { font-size: 1em; padding: 10px; }
+            .splash-screen { font-size: 1.2em; }
         }
 
         @media (min-width: 769px) {
@@ -418,13 +434,13 @@
             <h2 id="paymentMethodTitle">Confirme a sua compra</h2>
             <div class="payment-box">
                 <img src="assets/logo.png" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
-                <p>Pague R$ 2.999* via Pix para esta compra</p>
+                <p>Pague R$ 2.999* via boleto para garantir sua compra</p>
                 <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <img src="assets/pix.png" alt="Pix Icon" style="width: 24px; margin-right: 10px;">
-                    <span>Pix</span>
+                    <img src="assets/boleto.png" alt="Boleto Icon" style="width: 24px; margin-right: 10px;">
+                    <span>Boleto</span>
                 </div>
                 <div>
-                    <p>Copie o código para pagar</p>
+                    <p>Copie este código para pagar</p>
                     <ol style="padding-left: 20px; font-size: 0.9em;">
                         <li>Acesse seu Internet Banking ou app de pagamentos.</li>
                         <li>Escolha via Pix.</li>
@@ -439,7 +455,11 @@
                     </div>
                 </div>
                 <p>Pague até 12 horas</p>
-                <button class="btn-confirm" onclick="window.location.href='finalizar/pix'">Confirmar pagamento</button>
+                <div>
+                    <input type="checkbox" id="instantPayment">
+                    <label for="instantPayment">Pague e seja creditado na hora</label>
+                </div>
+                <button class="btn-confirm" onclick="confirmPayment()">Copiar código</button>
             </div>
         </div>
     </div>
@@ -453,6 +473,7 @@
         <a href="#">Dia das mães</a>
         <p>Copyright © 1999-2025 Ebazar.com.br LTDA. CNPJ n° 03.007.331/0001-41 / Av. das Nações Unidas, nº 3.003, Bonfim, Osasco/SP - CEP 06233-903 - empresa do grupo Mercado Livre.</p>
     </div>
+    <div class="splash-screen" id="splashScreen">Processando...</div>
     <script>
         function reviewPayment() {
             const selectedPayment = document.querySelector('input[name="payment"]:checked');
@@ -479,12 +500,28 @@
         }
 
         function confirmPurchase() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'pix';
-            if (selectedPayment === 'pix') {
-                window.location.href = 'finalizar/pix';
+            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'boleto';
+            if (selectedPayment) {
+                document.getElementById('reviewSection').style.display = 'none';
+                const splash = document.getElementById('splashScreen');
+                splash.style.display = 'flex';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    document.getElementById('paymentSection').style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (selectedPayment === 'boleto') {
+                        document.getElementById('paymentMethodTitle').textContent = 'Confirme a sua compra';
+                    }
+                }, 1500); // Splash por 1,5 segundos
             } else {
-                alert('Apenas pagamento via Pix está configurado para redirecionamento no momento.');
+                alert('Selecione um método de pagamento.');
             }
+        }
+
+        function confirmPayment() {
+            copyToClipboard('paymentKey');
+            alert('Código copiado! Prossiga com o pagamento.');
+            // Adicione aqui a lógica para a próxima etapa, se necessário
         }
 
         function copyToClipboard(elementId) {
@@ -492,7 +529,6 @@
             if (paymentKey) {
                 paymentKey.select();
                 document.execCommand('copy');
-                alert('Código copiado para a área de transferência!');
             }
         }
 
