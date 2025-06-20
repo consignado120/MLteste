@@ -98,15 +98,6 @@
       color: #666;
       font-size: 0.85em;
     }
-    .coupon-section {
-      padding: 10px 0;
-      margin-top: 10px;
-    }
-    .coupon-section p {
-      color: #3483fa;
-      font-size: 0.9em;
-      margin: 5px 0;
-    }
     .total-payment {
       text-align: right;
       font-weight: bold;
@@ -137,12 +128,6 @@
     .review-section .product-info {
       padding: 10px;
       border-bottom: 1px solid #ddd;
-    }
-    .review-section .edit-btn {
-      color: #3483fa;
-      text-decoration: underline;
-      cursor: pointer;
-      font-size: 0.9em;
     }
     .review-section .delivery-info {
       display: flex;
@@ -329,17 +314,6 @@
             <span>Aprovação em 1 a 2 dias úteis</span>
           </div>
         </label>
-        <label>
-          <input type="radio" name="payment" value="card">
-          <img src="assets/cartao.png" alt="Cartão Icon" class="method-icon">
-          <div class="method-details">
-            <span>Cartão</span>
-            <span>Aprovação imediata</span>
-          </div>
-        </label>
-      </div>
-      <div class="coupon-section">
-        <p>Inserir código do cupom</p>
       </div>
       <div class="total-payment">
         Você pagará: <span id="totalValue">R$ 1.999,89</span>
@@ -352,7 +326,6 @@
         <img src="assets/faturamento.png" alt="Faturamento Icon" style="vertical-align: middle; max-width: 24px;">
         <span id="clientName">gael free</span>
         <span id="clientCPF">CPF 4556790012</span>
-        <p class="edit-btn" onclick="editBilling()">Modificar dados de faturamento</p>
       </div>
       <div class="delivery-info">
         <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
@@ -368,7 +341,6 @@
           <p>Quantidade: 1</p>
         </div>
         <div class="payment-icon" id="paymentIcon"></div>
-        <p class="edit-btn" onclick="editDeliveryDate()">Alterar data de entrega</p>
       </div>
       <div class="payment-info" id="paymentInfo">
         <span></span>
@@ -462,35 +434,6 @@
       }
     }
 
-    function editBilling() {
-      const name = prompt("Novo nome:", document.getElementById('clientName').textContent);
-      const cpf = prompt("Novo CPF:", document.getElementById('clientCPF').textContent.replace('CPF ', ''));
-      if (name) document.getElementById('clientName').textContent = name;
-      if (cpf) document.getElementById('clientCPF').textContent = `CPF ${cpf}`;
-    }
-
-    function editDelivery() {
-      const address = prompt("Novo endereço:", document.getElementById('clientAddress').textContent);
-      if (address) document.getElementById('clientAddress').textContent = address;
-    }
-
-    function editDeliveryDate() {
-      const days = prompt("Novos dias de entrega (ex.: 08, 10):", document.getElementById('deliveryDate').textContent.replace(' e ', ','));
-      if (days) {
-        const daysArray = days.split(',').map(d => d.trim());
-        if (daysArray.length === 2 && daysArray.every(d => /^\d{1,2}$/.test(d))) {
-          document.getElementById('deliveryDate').textContent = days.replace(',', ' e ');
-        } else {
-          alert('Por favor, insira dois dias válidos separados por vírgula (ex.: 08, 10).');
-        }
-      }
-    }
-
-    function editPayment() {
-      document.getElementById('reviewSection').style.display = 'none';
-      document.getElementById('paymentChoice').style.display = 'block';
-    }
-
     function reviewPayment() {
       const selectedPayment = document.querySelector('input[name="payment"]:checked');
       if (selectedPayment) {
@@ -541,14 +484,6 @@
             boletoLineElement.value = data.boletoLine || '83640000001234567890123456789012345678901234567890';
             paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">R$ 1.999,89</span>`;
             paymentIcon.innerHTML = '';
-          } else if (selectedPayment === 'card') {
-            title.textContent = `Pague ${totalValue} via Cartão para garantir sua compra`;
-            instruction.textContent = 'Insira os dados do cartão para pagar';
-            qrCodeContainer.style.display = 'none';
-            pixDetails.style.display = 'none';
-            boletoDetails.style.display = 'none';
-            paymentInfo.innerHTML = `<img src="assets/cartao.png" alt="Cartão Icon" style="max-width: 24px; margin-right: 10px;">Cartão <span id="paymentValue">R$ 1.999,89</span>`;
-            paymentIcon.innerHTML = '';
           } else {
             console.error('Método de pagamento não selecionado');
             return;
@@ -567,10 +502,6 @@
         document.execCommand('copy');
         alert('Código copiado para a área de transferência!');
       }
-    }
-
-    function viewPurchases() {
-      alert('Redirecionando para minhas compras...');
     }
 
     window.onload = loadClientData;
