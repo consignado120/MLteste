@@ -41,6 +41,10 @@
             margin-bottom: 10px;
             flex: 1;
             min-width: 0;
+            display: none;
+        }
+        .section.active {
+            display: block;
         }
         .back-btn {
             position: absolute;
@@ -68,10 +72,6 @@
         .payment-methods input[type="radio"] {
             margin-right: 10px;
             vertical-align: middle;
-        }
-        .payment-methods .recommended {
-            background-color: #fff;
-            border-color: #ddd;
         }
         .payment-methods .recommended::after {
             content: 'RECOMENDADO';
@@ -106,14 +106,21 @@
             color: #666;
             font-size: 0.85em;
         }
-        .total-payment {
-            text-align: right;
-            font-weight: bold;
-            padding: 15px;
-            background-color: #fff;
+        .summary {
+            padding: 10px;
+        }
+        .summary div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .summary hr {
+            border: 0;
             border-top: 1px solid #ddd;
-            margin-top: 15px;
-            font-size: 1.1em;
+        }
+        .summary .total {
+            font-weight: bold;
+            margin-top: 10px;
         }
         .btn-confirm {
             background-color: #3483fa;
@@ -124,12 +131,10 @@
             width: 100%;
             font-size: 1em;
             cursor: pointer;
+            margin-top: 10px;
         }
         .btn-confirm:hover {
             background-color: #2968c8;
-        }
-        .review-section, .payment-section {
-            display: none;
         }
         .review-section .billing-info,
         .review-section .delivery-info,
@@ -175,47 +180,71 @@
             max-width: 24px;
             margin-right: 10px;
         }
-        .review-section .total {
-            text-align: right;
-            font-weight: bold;
-            padding: 10px;
-            background-color: #fff;
-            border-top: 1px solid #ddd;
-        }
         .payment-section {
-            background-color: #00a650;
-            color: white;
+            width: 100%;
             padding: 20px;
             text-align: center;
-            min-height: 100vh;
+            display: none;
+        }
+        .payment-section.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #00a650;
+            color: white;
+        }
+        .payment-header {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .payment-header img {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-left: 10px;
+            background-color: white;
+            padding: 5px;
         }
         .payment-box {
             background-color: white;
             padding: 15px;
             border-radius: 8px;
-            display: inline-block;
-            text-align: left;
-            color: #333;
+            width: 100%;
             max-width: 400px;
             box-sizing: border-box;
+            text-align: left;
+            color: #333;
+            margin-top: 10px;
         }
         .payment-box p {
             margin: 5px 0;
             font-size: 0.9em;
         }
+        .payment-box ol {
+            padding-left: 20px;
+            font-size: 0.9em;
+        }
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-code img {
+            max-width: 200px;
+        }
         .copy-key {
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .copy-key input {
-            width: 100%;
+            flex: 1;
             padding: 8px;
             font-size: 0.9em;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
             word-break: break-all;
-            white-space: nowrap;
-            overflow-x: auto;
         }
         .copy-key button {
             background-color: #3483fa;
@@ -224,30 +253,10 @@
             padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 10px;
             font-size: 0.9em;
         }
         .copy-key button:hover {
             background-color: #2968c8;
-        }
-        .view-purchases {
-            background-color: #e0e0e0;
-            color: #333;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        .view-purchases:hover {
-            background-color: #c0c0c0;
-        }
-        .qr-code {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .qr-code img {
-            max-width: 200px;
         }
         .splash-screen {
             display: none;
@@ -271,6 +280,7 @@
             font-size: 0.7em;
             color: #666;
             border-top: 1px solid #ddd;
+            margin-top: auto;
         }
         .footer a {
             color: #333;
@@ -282,38 +292,25 @@
         }
 
         @media (max-width: 768px) {
-            .content { 
-                padding: 10px;
-                flex-direction: column;
-            }
-            .section { 
-                margin-bottom: 5px; 
-                padding: 10px;
-                width: 100%;
-            }
             .header { height: 40px; }
             .header img { height: 20px; }
-            .billing-info, .delivery-info, .product-info, .payment-info {
+            .section { width: 100%; }
+            .payment-box {
+                max-width: 100%;
+            }
+            .copy-key {
                 flex-direction: column;
-                align-items: flex-start;
+                gap: 5px;
             }
-            .billing-info img, .delivery-info img, .product-info img, .payment-info img {
-                margin-right: 0;
-                margin-bottom: 5px;
+            .copy-key input {
+                width: 100%;
             }
-            .billing-info .text, .delivery-info .text, .product-info .text {
-                text-align: left;
-            }
-            .delivery-info .text span.delivery-date {
-                flex-direction: row;
-                align-items: center;
+            .copy-key button {
+                width: 100%;
             }
             .qr-code img { max-width: 150px; }
             .btn-confirm { font-size: 0.9em; padding: 8px; }
             .footer { font-size: 0.6em; padding: 5px 10px; }
-            .copy-key input, .copy-key button, .view-purchases { font-size: 0.8em; padding: 6px 12px; }
-            .payment-methods label { padding: 10px; font-size: 0.9em; }
-            .total-payment { font-size: 1em; padding: 10px; }
             .splash-screen { font-size: 1.2em; }
         }
 
@@ -334,9 +331,9 @@
         <img src="assets/logo.png" alt="Mercado Livre Logo">
     </div>
     <div class="content">
-        <a href="#" class="back-btn">←</a>
+        <a href="#" class="back-btn" onclick="goBack()">←</a>
         <div class="section payment-choice active" id="paymentChoice">
-            <h2>Como você prefere pagar?</h2>
+            <h2>Escolha como pagar</h2>
             <div class="payment-methods">
                 <label class="recommended">
                     <input type="radio" name="payment" value="pix" required>
@@ -363,31 +360,17 @@
                     </div>
                 </label>
             </div>
-            <div style="padding: 10px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Produto</span>
-                    <span>R$ 2.999,00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Frete</span>
-                    <span>Grátis</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <span>Insira código do cupom</span>
-                    <span></span>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #ddd;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px;">
-                    <span>Você pagará</span>
-                    <span>R$ 2.999,00</span>
-                </div>
+            <div class="summary">
+                <h3>Resumo da compra</h3>
+                <div><span>Produto</span><span>R$ 2.999,00</span></div>
+                <div><span>Frete</span><span>Grátis</span></div>
+                <div><span>Insira código do cupom</span><span></span></div>
+                <hr>
+                <div class="total"><span>Você pagará</span><span>R$ 2.999,00</span></div>
             </div>
             <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
         </div>
-        <div class="section" id="summarySection" style="display: none;">
-            <!-- Resumo da compra removido desta seção pois será dinâmico em reviewSection -->
-        </div>
-        <div class="section review-section" id="reviewSection" style="display: none;">
+        <div class="section review-section" id="reviewSection">
             <h2>Revise e confirme</h2>
             <div class="billing-info">
                 <img src="assets/faturamento.png" alt="Faturamento Icon">
@@ -419,59 +402,35 @@
                 <span id="paymentMethod">Método de Pagamento</span>
                 <span id="paymentValue">R$ 2.999,00</span>
             </div>
-            <div style="padding: 10px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Produto</span>
-                    <span>R$ 2.999,00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Frete</span>
-                    <span>Grátis</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <span>Insira código do cupom</span>
-                    <span></span>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #ddd;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px;">
-                    <span>Você pagará</span>
-                    <span>R$ 2.999,00</span>
-                </div>
-            </div>
-            <div class="total">
-                Total: <span id="totalValueReview">R$ 2.999,00</span>
+            <div class="summary">
+                <h3>Resumo da compra</h3>
+                <div><span>Produto</span><span>R$ 2.999,00</span></div>
+                <div><span>Frete</span><span>Grátis</span></div>
+                <div><span>Insira código do cupom</span><span></span></div>
+                <hr>
+                <div class="total"><span>Você pagará</span><span>R$ 2.999,00</span></div>
             </div>
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
-        <div class="section payment-section" id="paymentSection" style="display: none;">
-            <div class="header">
-                <img src="assets/logo.png" alt="Mercado Livre Logo">
+        <div class="section payment-section" id="paymentSection">
+            <div class="payment-header" id="paymentHeader">
+                Pague R$ 2.999* via Pix para garantir sua compra
+                <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">
             </div>
-            <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; margin-top: 60px;">
-                <span style="font-size: 1.2em;" id="paymentHeader">Pague R$ 2.999* via boleto para garantir sua compra</span>
-                <span style="display: inline-block; background-color: white; padding: 5px; margin-left: 10px; vertical-align: middle;">
-                    <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; height: 24px; vertical-align: middle;">
-                </span>
-            </div>
-            <div class="payment-box" style="background-color: white; padding: 20px; border-radius: 0 0 8px 8px;">
+            <div class="payment-box">
                 <p>Escaneie este código QR para pagar</p>
-                <ol style="padding-left: 20px; font-size: 0.9em;">
+                <ol>
                     <li>Acesse seu Internet Banking ou app de pagamentos.</li>
                     <li>Escolha pagar via Pix.</li>
                     <li>Escaneie o seguinte código:</li>
                 </ol>
                 <div class="qr-code">
-                    <img src="assets/qrcode.png" alt="QR Code" style="max-width: 200px;">
+                    <img src="assets/qrcode.png" alt="QR Code">
                 </div>
-                <p>Ou copie este código para fazer o pagamento</p>
+                <p>Ou pague e será creditado na hora</p>
                 <div class="copy-key">
-                    <input type="text" id="paymentKey" value="000212600014br.gob.bcb.pix0104aaa5204000053c" readonly>
-                    <button onclick="copyToClipboard('paymentKey')">Copiar código</button>
-                </div>
-                <p>Pague e será creditado na hora</p>
-                <div>
-                    <input type="checkbox" id="instantPayment" checked>
-                    <label for="instantPayment"></label>
+                    <input type="text" value="000212600014br.gob.bcb.pix0104aaa5204000053c" readonly>
+                    <button onclick="copyToClipboard()">Copiar código</button>
                 </div>
             </div>
         </div>
@@ -484,15 +443,26 @@
         <a href="#">Contato</a> |
         <a href="#">Informações sobre seguros</a> |
         <a href="#">Dia das mães</a>
-        <p>Copyright © 1999-2025 Ebazar.com.br LTDA. CNPJ n° 03.007.331/0001-41 / Av. das Nações Unidas, nº 3.003, Bonfim, Osasco/SP - CEP 06233-903 - empresa do grupo Mercado Livre.</p>
+        <p>Copyright © 1999-2024 Ebazar.com.br LTDA. CNPJ n° 03.007.331/0001-41 / Av. das Nações Unidas, nº 3.003, Bonfim, Osasco/SP - CEP 06233-903 - empresa do grupo Mercado Livre.</p>
     </div>
     <div class="splash-screen" id="splashScreen">Processando...</div>
     <script>
+        function goBack() {
+            const sections = ['paymentChoice', 'reviewSection', 'paymentSection'];
+            const current = document.querySelector('.section.active');
+            const currentIndex = sections.indexOf(current.id);
+            if (currentIndex > 0) {
+                current.classList.remove('active');
+                document.getElementById(sections[currentIndex - 1]).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
         function reviewPayment() {
             const selectedPayment = document.querySelector('input[name="payment"]:checked');
             if (selectedPayment) {
-                document.getElementById('paymentChoice').style.display = 'none';
-                document.getElementById('reviewSection').style.display = 'block';
+                document.getElementById('paymentChoice').classList.remove('active');
+                document.getElementById('reviewSection').classList.add('active');
                 const paymentMethod = selectedPayment.value;
                 const paymentIconReview = document.getElementById('paymentIconReview');
                 const paymentMethodText = document.getElementById('paymentMethod');
@@ -507,40 +477,43 @@
                     paymentIconReview.src = 'assets/cartao.png';
                     paymentMethodText.textContent = 'Cartão de Crédito';
                 }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 alert('Por favor, selecione um método de pagamento.');
             }
         }
 
         function confirmPurchase() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'boleto';
+            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'pix';
             if (selectedPayment) {
-                document.getElementById('reviewSection').style.display = 'none';
+                document.getElementById('paymentChoice').classList.remove('active');
+                document.getElementById('reviewSection').classList.remove('active');
                 const splash = document.getElementById('splashScreen');
                 splash.style.display = 'flex';
                 setTimeout(() => {
                     splash.style.display = 'none';
-                    document.getElementById('paymentSection').style.display = 'block';
+                    document.getElementById('paymentSection').classList.add('active');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     const paymentHeader = document.getElementById('paymentHeader');
                     if (selectedPayment === 'boleto') {
-                        paymentHeader.textContent = 'Pague R$ 2.999* via boleto para garantir sua compra';
+                        paymentHeader.textContent = 'Pague R$ 2.999* via Boleto para garantir sua compra';
                     } else if (selectedPayment === 'pix') {
                         paymentHeader.textContent = 'Pague R$ 2.999* via Pix para garantir sua compra';
+                    } else if (selectedPayment === 'cartao') {
+                        paymentHeader.textContent = 'Pague R$ 2.999* via Cartão para garantir sua compra';
                     }
+                    paymentHeader.innerHTML += ' <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">';
                 }, 1500); // Splash por 1,5 segundos
             } else {
                 alert('Selecione um método de pagamento.');
             }
         }
 
-        function copyToClipboard(elementId) {
-            const paymentKey = document.getElementById(elementId);
-            if (paymentKey) {
-                paymentKey.select();
-                document.execCommand('copy');
-                alert('Código copiado! Prossiga com o pagamento.');
-            }
+        function copyToClipboard() {
+            const input = document.querySelector('.copy-key input');
+            input.select();
+            document.execCommand('copy');
+            alert('Código copiado! Prossiga com o pagamento.');
         }
 
         window.onload = function() {
