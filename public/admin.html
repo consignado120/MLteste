@@ -360,7 +360,7 @@
 
     async function loadClients() {
       try {
-        const response = await fetch('http://localhost:3000/clients');
+        const response = await fetch('https://mlteste.onrender.com/clients');
         if (!response.ok) throw new Error('Erro na resposta');
         const data = await response.json();
         const clientList = document.getElementById('clientList');
@@ -370,7 +370,7 @@
         } else {
           data.forEach(client => {
             const link = document.createElement('a');
-            link.href = `http://localhost:3000/index.html?id=${client.id}`;
+            link.href = `https://mlteste.onrender.com/index.html?id=${client.id}`;
             link.textContent = `${client.name} (ID: ${client.id})`;
             link.target = '_blank';
             const deleteBtn = document.createElement('button');
@@ -424,7 +424,7 @@
       }
 
       try {
-        const response = await fetch('http://localhost:3000/client', {
+        const response = await fetch('https://mlteste.onrender.com/client', {
           method: 'POST',
           body: formData
         });
@@ -443,7 +443,7 @@
           document.getElementById('adminPixCode').value = '';
           document.getElementById('adminBoletoLine').value = '';
           const linkSection = document.getElementById('clientLink');
-          linkSection.innerHTML = `<p>Link para o cliente: <a href="http://localhost:3000/index.html?id=${data.clientId}" target="_blank">http://localhost:3000/index.html?id=${data.clientId}</a></p>`;
+          linkSection.innerHTML = `<p>Link para o cliente: <a href="https://mlteste.onrender.com/index.html?id=${data.clientId}" target="_blank">https://mlteste.onrender.comindex.html?id=${data.clientId}</a></p>`;
           linkSection.style.display = 'block';
           loadClients();
         } else {
@@ -457,7 +457,7 @@
 
     async function deleteClient(clientId) {
       try {
-        const response = await fetch(`http://localhost:3000/client/${clientId}`, {
+        const response = await fetch(`https://mlteste.onrender.com/client/${clientId}`, {
           method: 'DELETE'
         });
         if (!response.ok) throw new Error('Erro ao apagar cliente');
@@ -471,7 +471,7 @@
     async function deleteAllClients() {
       if (confirm('Tem certeza que deseja apagar todos os clientes? Essa ação não pode ser desfeita.')) {
         try {
-          const response = await fetch('http://localhost:3000/clients', {
+          const response = await fetch('https://mlteste.onrender.com/clients', {
             method: 'DELETE'
           });
           if (!response.ok) throw new Error('Erro ao apagar todos os clientes');
