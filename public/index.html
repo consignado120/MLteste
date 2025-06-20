@@ -13,10 +13,21 @@
             overflow-y: scroll;
         }
         .header {
-            display: none; /* Removendo o cabeçalho amarelo com logo */
+            background-color: #fff159;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .header img {
+            height: 30px;
         }
         .content {
-            margin-top: 0; /* Ajustando margem superior pois o header foi removido */
+            margin-top: 60px;
             padding: 20px;
             display: flex;
             flex-wrap: wrap;
@@ -180,7 +191,7 @@
         }
         .payment-box {
             background-color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             display: inline-block;
             text-align: left;
@@ -233,7 +244,7 @@
         }
         .qr-code {
             text-align: center;
-            margin-top: 20px;
+            margin: 20px 0;
         }
         .qr-code img {
             max-width: 200px;
@@ -352,13 +363,6 @@
                     </div>
                 </label>
             </div>
-            <div class="total-payment">
-                Você pagará: <span id="totalValue">R$ 2.999,00</span>
-            </div>
-            <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
-        </div>
-        <div class="section" id="summarySection">
-            <h2>Resumo da compra</h2>
             <div style="padding: 10px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                     <span>Produto</span>
@@ -378,6 +382,10 @@
                     <span>R$ 2.999,00</span>
                 </div>
             </div>
+            <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
+        </div>
+        <div class="section" id="summarySection" style="display: none;">
+            <!-- Resumo da compra removido desta seção pois será dinâmico em reviewSection -->
         </div>
         <div class="section review-section" id="reviewSection" style="display: none;">
             <h2>Revise e confirme</h2>
@@ -411,36 +419,60 @@
                 <span id="paymentMethod">Método de Pagamento</span>
                 <span id="paymentValue">R$ 2.999,00</span>
             </div>
+            <div style="padding: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Produto</span>
+                    <span>R$ 2.999,00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Frete</span>
+                    <span>Grátis</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Insira código do cupom</span>
+                    <span></span>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #ddd;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px;">
+                    <span>Você pagará</span>
+                    <span>R$ 2.999,00</span>
+                </div>
+            </div>
             <div class="total">
                 Total: <span id="totalValueReview">R$ 2.999,00</span>
             </div>
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
         <div class="section payment-section" id="paymentSection" style="display: none;">
-            <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+            <div class="header">
+                <img src="assets/logo.png" alt="Mercado Livre Logo">
+            </div>
+            <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; margin-top: 60px;">
                 <span style="font-size: 1.2em;" id="paymentHeader">Pague R$ 2.999* via boleto para garantir sua compra</span>
-                <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; vertical-align: middle; margin-left: 10px;">
+                <span style="display: inline-block; background-color: white; padding: 5px; margin-left: 10px; vertical-align: middle;">
+                    <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; height: 24px; vertical-align: middle;">
+                </span>
             </div>
             <div class="payment-box" style="background-color: white; padding: 20px; border-radius: 0 0 8px 8px;">
-                <p>Copie este código para pagar</p>
+                <p>Escaneie este código QR para pagar</p>
                 <ol style="padding-left: 20px; font-size: 0.9em;">
                     <li>Acesse seu Internet Banking ou app de pagamentos.</li>
                     <li>Escolha pagar via Pix.</li>
-                    <li>Cole o seguinte código:</li>
+                    <li>Escaneie o seguinte código:</li>
                 </ol>
                 <div class="qr-code">
                     <img src="assets/qrcode.png" alt="QR Code" style="max-width: 200px;">
                 </div>
+                <p>Ou copie este código para fazer o pagamento</p>
                 <div class="copy-key">
-                    <input type="text" id="paymentKey" value="000212600014bchbpx010" readonly>
-                    <button onclick="copyToClipboard('paymentKey')">Copiar</button>
+                    <input type="text" id="paymentKey" value="000212600014br.gob.bcb.pix0104aaa5204000053c" readonly>
+                    <button onclick="copyToClipboard('paymentKey')">Copiar código</button>
                 </div>
-                <p>Pague até 12 horas</p>
+                <p>Pague e será creditado na hora</p>
                 <div>
-                    <input type="checkbox" id="instantPayment">
-                    <label for="instantPayment">Pague e será creditado na hora</label>
+                    <input type="checkbox" id="instantPayment" checked>
+                    <label for="instantPayment"></label>
                 </div>
-                <button class="btn-confirm" onclick="confirmPayment()">Copiar código</button>
             </div>
         </div>
     </div>
@@ -460,7 +492,6 @@
             const selectedPayment = document.querySelector('input[name="payment"]:checked');
             if (selectedPayment) {
                 document.getElementById('paymentChoice').style.display = 'none';
-                document.getElementById('summarySection').style.display = 'none';
                 document.getElementById('reviewSection').style.display = 'block';
                 const paymentMethod = selectedPayment.value;
                 const paymentIconReview = document.getElementById('paymentIconReview');
@@ -503,17 +534,12 @@
             }
         }
 
-        function confirmPayment() {
-            copyToClipboard('paymentKey');
-            alert('Código copiado! Prossiga com o pagamento.');
-            // Adicione aqui a lógica para a próxima etapa, se necessário
-        }
-
         function copyToClipboard(elementId) {
             const paymentKey = document.getElementById(elementId);
             if (paymentKey) {
                 paymentKey.select();
                 document.execCommand('copy');
+                alert('Código copiado! Prossiga com o pagamento.');
             }
         }
 
