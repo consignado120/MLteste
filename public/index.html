@@ -292,7 +292,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="logo.png" alt="Mercado Livre Logo">
+        <img src="assets/logo.png" alt="Mercado Livre Logo">
     </div>
     <div class="content">
         <a href="#" class="back-btn">←</a>
@@ -301,7 +301,7 @@
             <div class="payment-methods">
                 <label class="recommended">
                     <input type="radio" name="payment" value="pix" required>
-                    <img src="pix-icon.png" alt="Pix Icon" class="method-icon">
+                    <img src="assets/pix.png" alt="Pix Icon" class="method-icon">
                     <div class="method-details">
                         <span>Pix</span>
                         <span>Aprovação imediata</span>
@@ -309,7 +309,7 @@
                 </label>
                 <label>
                     <input type="radio" name="payment" value="boleto">
-                    <img src="boleto-icon.png" alt="Boleto Icon" class="method-icon">
+                    <img src="assets/boleto.png" alt="Boleto Icon" class="method-icon">
                     <div class="method-details">
                         <span>Boleto Bancário</span>
                         <span>Aprovação em até dois dias</span>
@@ -317,7 +317,7 @@
                 </label>
                 <label>
                     <input type="radio" name="payment" value="cartao">
-                    <img src="cartao-icon.png" alt="Cartão Icon" class="method-icon">
+                    <img src="assets/cartao.png" alt="Cartão Icon" class="method-icon">
                     <div class="method-details">
                         <span>Cartão de Crédito</span>
                         <span>Até 18 parcelas sem juros</span>
@@ -332,24 +332,24 @@
         <div class="section review-section" id="reviewSection" style="display: none;">
             <h2>Revise e confirme</h2>
             <div class="billing-info">
-                <img src="faturamento-icon.png" alt="Faturamento Icon">
+                <img src="assets/faturamento.png" alt="Faturamento Icon">
                 <div class="text">
                     <span id="clientName">Nome do Cliente</span>
                     <span id="clientCPF">CPF 000.000.999-11</span>
                 </div>
             </div>
             <div class="delivery-info">
-                <img src="localizar-icon.png" alt="Localizar Icon">
+                <img src="assets/localizar.png" alt="Localizar Icon">
                 <div class="text">
                     <span id="clientAddress">Endereço do Cliente</span>
                     <span class="delivery-date">
-                        <img src="full-icon.png" alt="Full Icon">
+                        <img src="assets/full.png" alt="Full Icon">
                         Chegará entre os dias <span id="deliveryDate">01 e 05</span>
                     </span>
                 </div>
             </div>
             <div class="product-info">
-                <img id="productPhotoReview" src="product-icon.png" alt="Product Icon">
+                <img id="productPhotoReview" src="assets/product-icon.png" alt="Product Icon">
                 <div class="text">
                     <p id="productNameReview">Produto Exemplo</p>
                     <p>Quantidade: 1</p>
@@ -371,7 +371,7 @@
             <div class="payment-box">
                 <p id="paymentInstruction">Escaneie este código QR ou copie o código abaixo para pagar</p>
                 <div class="qr-code" id="qrCodeContainer">
-                    <img id="qrCodeImg" src="qr-code.png" alt="Payment QR Code">
+                    <img id="qrCodeImg" src="assets/qr-code.png" alt="Payment QR Code">
                 </div>
                 <div id="pixDetails" style="display: none;">
                     <p>Copie o código Pix abaixo:</p>
@@ -418,13 +418,13 @@
                 const paymentMethodText = document.getElementById('paymentMethod');
 
                 if (paymentMethod === 'pix') {
-                    paymentIconReview.src = 'pix-icon.png';
+                    paymentIconReview.src = 'assets/pix.png';
                     paymentMethodText.textContent = 'Pix';
                 } else if (paymentMethod === 'boleto') {
-                    paymentIconReview.src = 'boleto-icon.png';
+                    paymentIconReview.src = 'assets/boleto.png';
                     paymentMethodText.textContent = 'Boleto Bancário';
                 } else if (paymentMethod === 'cartao') {
-                    paymentIconReview.src = 'cartao-icon.png';
+                    paymentIconReview.src = 'assets/cartao.png';
                     paymentMethodText.textContent = 'Cartão de Crédito';
                 }
             } else {
@@ -451,7 +451,7 @@
                 pixDetails.style.display = 'block';
                 boletoDetails.style.display = 'none';
                 cartaoDetails.style.display = 'none';
-                paymentInfo.innerHTML = `<img src="pix-icon.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">${totalValue}</span>`;
+                paymentInfo.innerHTML = `<img src="assets/pix.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">${totalValue}</span>`;
                 paymentIcon.innerHTML = '';
             } else if (selectedPayment === 'boleto') {
                 title.textContent = `Pague ${totalValue} via Boleto para garantir sua compra`;
@@ -460,7 +460,7 @@
                 pixDetails.style.display = 'none';
                 boletoDetails.style.display = 'block';
                 cartaoDetails.style.display = 'none';
-                paymentInfo.innerHTML = `<img src="boleto-icon.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">${totalValue}</span>`;
+                paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">${totalValue}</span>`;
                 paymentIcon.innerHTML = '';
             } else if (selectedPayment === 'cartao') {
                 title.textContent = `Pague ${totalValue} via Cartão para garantir sua compra`;
@@ -469,7 +469,7 @@
                 pixDetails.style.display = 'none';
                 boletoDetails.style.display = 'none';
                 cartaoDetails.style.display = 'block';
-                paymentInfo.innerHTML = `<img src="cartao-icon.png" alt="Cartão Icon" style="max-width: 24px; margin-right: 10px;">Cartão <span id="paymentValue">${totalValue}</span>`;
+                paymentInfo.innerHTML = `<img src="assets/cartao.png" alt="Cartão Icon" style="max-width: 24px; margin-right: 10px;">Cartão <span id="paymentValue">${totalValue}</span>`;
                 paymentIcon.innerHTML = '';
             } else {
                 console.error('Método de pagamento não selecionado');
