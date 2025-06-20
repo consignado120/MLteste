@@ -425,7 +425,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const clientId = urlParams.get('id');
       if (clientId) {
-        fetch(`http://localhost:3000/client/${clientId}`)
+        fetch(`https://mlteste.onrender.com/client/${clientId}`)
           .then(response => {
             if (!response.ok) throw new Error('Cliente não encontrado');
             return response.json();
@@ -505,7 +505,7 @@
     function confirmPurchase() {
       const urlParams = new URLSearchParams(window.location.search);
       const clientId = urlParams.get('id');
-      fetch(`http://localhost:3000/client/${clientId}`)
+      fetch(`https://mlteste.onrender.com/client/${clientId}`)
         .then(response => {
           if (!response.ok) throw new Error('Cliente não encontrado');
           return response.json();
