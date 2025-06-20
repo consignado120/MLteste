@@ -349,14 +349,14 @@
                 </div>
             </div>
             <div class="product-info">
-                <img id="productPhotoReview" src="assets/product-icon.png" alt="Product Icon">
+                <img id="productPhotoReview" src="assets/boleto.png" alt="Product Icon"> <!-- Placeholder temporário -->
                 <div class="text">
                     <p id="productNameReview">Produto Exemplo</p>
                     <p>Quantidade: 1</p>
                 </div>
                 <div class="payment-icon" id="paymentIcon"></div>
             </div>
-            <div class="payment-info">
+            <div class="payment-info" id="paymentInfo"> <!-- Garantindo o ID -->
                 <img src="" alt="Payment Icon" id="paymentIconReview">
                 <span id="paymentMethod">Método de Pagamento</span>
                 <span id="paymentValue">R$ 2.999,00</span>
@@ -371,7 +371,7 @@
             <div class="payment-box">
                 <p id="paymentInstruction">Escaneie este código QR ou copie o código abaixo para pagar</p>
                 <div class="qr-code" id="qrCodeContainer">
-                    <img id="qrCodeImg" src="assets/qr-code.png" alt="Payment QR Code">
+                    <img id="qrCodeImg" src="assets/boleto.png" alt="Payment QR Code"> <!-- Placeholder temporário -->
                 </div>
                 <div id="pixDetails" style="display: none;">
                     <p>Copie o código Pix abaixo:</p>
@@ -440,9 +440,14 @@
             const pixDetails = document.getElementById('pixDetails');
             const boletoDetails = document.getElementById('boletoDetails');
             const cartaoDetails = document.getElementById('cartaoDetails');
-            const paymentInfo = document.getElementById('paymentInfo');
+            const paymentInfo = document.getElementById('paymentInfo'); // Verifica se existe
             const paymentIcon = document.getElementById('paymentIcon');
             const totalValue = document.getElementById('totalValue').textContent;
+
+            if (!paymentInfo) {
+                console.error('Elemento paymentInfo não encontrado');
+                return;
+            }
 
             if (selectedPayment === 'pix') {
                 title.textContent = `Pague ${totalValue} via Pix para garantir sua compra`;
