@@ -89,8 +89,6 @@
             width: 24px;
             height: 24px;
             margin-right: 10px;
-            border-radius: 50%;
-            background-color: #00a650;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -417,33 +415,26 @@
             <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
         </div>
         <div class="section payment-section" id="paymentSection">
-            <h2 id="paymentMethodTitle">Pague R$ 2.999,00 via [Método] para garantir sua compra</h2>
+            <h2 id="paymentMethodTitle">Confirme a sua compra</h2>
             <div class="payment-box">
-                <p id="paymentInstruction">Escaneie este código QR ou copie o código abaixo para pagar</p>
-                <div class="qr-code" id="qrCodeContainer">
-                    <img id="qrCodeImg" src="assets/boleto.png" alt="Payment QR Code"> <!-- Placeholder temporário -->
+                <img src="assets/logo.png" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
+                <p>Envio #1 FULL</p>
+                <p>Chegou no seu endereço amanhã</p>
+                <h3>Mesa de jantar 10 cadeiras madeira maciça peroba rosa linda</h3>
+                <p>Cor: Padrão</p>
+                <p>Quantidade: 100</p>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <img src="assets/pix.png" alt="Pix Icon" style="width: 24px; margin-right: 10px;">
+                    <span>Pix R$ 2.999*</span>
                 </div>
-                <div id="pixDetails" style="display: none;">
-                    <p>Copie o código Pix abaixo:</p>
-                    <div class="copy-key">
-                        <input type="text" id="pixCode" value="12345678901234567890123456789012" readonly>
-                        <button onclick="copyToClipboard('pixCode')">Copiar código</button>
-                    </div>
+                <p>Não foi realizado este o pagamento até agora. Não há tempo para aprovação. Não há percentagem de aprovação.</p>
+                <p>Alterar meio de pagamento</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
                 </div>
-                <div id="boletoDetails" style="display: none;">
-                    <p>Baixe o boleto abaixo ou copie a linha digitável:</p>
-                    <div class="copy-key">
-                        <input type="text" id="boletoLine" value="83640000001234567890123456789012345678901234567890" readonly>
-                        <button onclick="copyToClipboard('boletoLine')">Copiar linha</button>
-                    </div>
-                    <p>Após pagamento, a aprovação ocorre em 1 a 2 dias úteis.</p>
-                </div>
-                <div id="cartaoDetails" style="display: none;">
-                    <p>Pagamento com cartão será processado após confirmação.</p>
-                </div>
-                <p><i>Pague e será creditado na hora</i></p>
-                <p>Pague até 11:59 PM -04 de sexta-feira, 20 de junho de 2025.</p>
-                <p><i>Pague agora para garantir sua compra</i></p>
+                <p style="font-size: 0.8em; color: #666; margin-top: 20px;">Marcos Roberto Floreze Goetten</p>
+                <p style="font-size: 0.8em; color: #666;">CPF .......</p>
+                <p style="font-size: 0.8em; color: #666;">Editar dados</p>
             </div>
         </div>
     </div>
@@ -483,53 +474,33 @@
         }
 
         function confirmPurchase() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || '';
+            const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || 'pix'; // Default to Pix if none selected
             const title = document.getElementById('paymentMethodTitle');
-            const instruction = document.getElementById('paymentInstruction');
-            const qrCodeContainer = document.getElementById('qrCodeContainer');
-            const pixDetails = document.getElementById('pixDetails');
-            const boletoDetails = document.getElementById('boletoDetails');
-            const cartaoDetails = document.getElementById('cartaoDetails');
-            const paymentInfo = document.getElementById('paymentInfo');
-            const paymentIcon = document.getElementById('paymentIcon');
+            const paymentBox = document.querySelector('.payment-box');
             const totalValue = document.getElementById('totalValue').textContent;
 
-            if (!paymentInfo) {
-                console.error('Elemento paymentInfo não encontrado');
-                return;
-            }
+            title.textContent = 'Confirme a sua compra';
+            paymentBox.innerHTML = `
+                <img src="assets/logo.png" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
+                <p>Envio #1 FULL</p>
+                <p>Chegou no seu endereço amanhã</p>
+                <h3>Mesa de jantar 10 cadeiras madeira maciça peroba rosa linda</h3>
+                <p>Cor: Padrão</p>
+                <p>Quantidade: 100</p>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <img src="assets/${selectedPayment}.png" alt="${selectedPayment.charAt(0).toUpperCase() + selectedPayment.slice(1)} Icon" style="width: 24px; margin-right: 10px;">
+                    <span>${selectedPayment.charAt(0).toUpperCase() + selectedPayment.slice(1)} ${totalValue}*</span>
+                </div>
+                <p>Não foi realizado este o pagamento até agora. Não há tempo para aprovação. Não há percentagem de aprovação.</p>
+                <p>Alterar meio de pagamento</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
+                </div>
+                <p style="font-size: 0.8em; color: #666; margin-top: 20px;">Marcos Roberto Floreze Goetten</p>
+                <p style="font-size: 0.8em; color: #666;">CPF .......</p>
+                <p style="font-size: 0.8em; color: #666;">Editar dados</p>
+            `;
 
-            if (selectedPayment === 'pix') {
-                title.textContent = `Pague ${totalValue} via Pix para garantir sua compra`;
-                instruction.textContent = 'Escaneie este código QR ou copie o código abaixo para pagar';
-                qrCodeContainer.style.display = 'block';
-                pixDetails.style.display = 'block';
-                boletoDetails.style.display = 'none';
-                cartaoDetails.style.display = 'none';
-                paymentInfo.innerHTML = `<img src="assets/pix.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">${totalValue}</span>`;
-                paymentIcon.innerHTML = '';
-            } else if (selectedPayment === 'boleto') {
-                title.textContent = `Pague ${totalValue} via Boleto para garantir sua compra`;
-                instruction.textContent = 'Pague o boleto utilizando os dados abaixo';
-                qrCodeContainer.style.display = 'none';
-                pixDetails.style.display = 'none';
-                boletoDetails.style.display = 'block';
-                cartaoDetails.style.display = 'none';
-                paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">${totalValue}</span>`;
-                paymentIcon.innerHTML = '';
-            } else if (selectedPayment === 'cartao') {
-                title.textContent = `Pague ${totalValue} via Cartão para garantir sua compra`;
-                instruction.textContent = 'Pagamento será processado após confirmação';
-                qrCodeContainer.style.display = 'none';
-                pixDetails.style.display = 'none';
-                boletoDetails.style.display = 'none';
-                cartaoDetails.style.display = 'block';
-                paymentInfo.innerHTML = `<img src="assets/cartao.png" alt="Cartão Icon" style="max-width: 24px; margin-right: 10px;">Cartão <span id="paymentValue">${totalValue}</span>`;
-                paymentIcon.innerHTML = '';
-            } else {
-                console.error('Método de pagamento não selecionado');
-                return;
-            }
             document.getElementById('reviewSection').style.display = 'none';
             document.getElementById('paymentSection').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
