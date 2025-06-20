@@ -13,21 +13,10 @@
             overflow-y: scroll;
         }
         .header {
-            background-color: #fff159;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        .header img {
-            height: 30px;
+            display: none; /* Removendo o cabeçalho amarelo com logo */
         }
         .content {
-            margin-top: 60px;
+            margin-top: 0; /* Ajustando margem superior pois o header foi removido */
             padding: 20px;
             display: flex;
             flex-wrap: wrap;
@@ -429,7 +418,7 @@
         </div>
         <div class="section payment-section" id="paymentSection" style="display: none;">
             <div class="payment-box" style="background-color: #00a650; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-                <span style="font-size: 1.2em;" id="paymentHeader">Pague R$ 2.999* via Pix para garantir sua compra</span>
+                <span style="font-size: 1.2em;" id="paymentHeader">Pague R$ 2.999* via boleto para garantir sua compra</span>
                 <img src="assets/shopping_bag.png" alt="Shopping Bag Icon" style="width: 24px; vertical-align: middle; margin-left: 10px;">
             </div>
             <div class="payment-box" style="background-color: white; padding: 20px; border-radius: 0 0 8px 8px;">
