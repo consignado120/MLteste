@@ -42,6 +42,15 @@
             flex: 1;
             min-width: 0;
         }
+        .summary-section {
+            background-color: #fff159;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            flex: 1;
+            min-width: 0;
+        }
         .back-btn {
             position: absolute;
             top: 10px;
@@ -274,7 +283,7 @@
                 padding: 10px;
                 flex-direction: column;
             }
-            .section { 
+            .section, .summary-section { 
                 margin-bottom: 5px; 
                 padding: 10px;
                 width: 100%;
@@ -355,7 +364,7 @@
             </div>
             <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
         </div>
-        <div class="section" id="summarySection">
+        <div class="summary-section" id="summarySection">
             <h2>Resumo da compra</h2>
             <div style="padding: 10px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
