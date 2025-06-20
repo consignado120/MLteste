@@ -139,6 +139,8 @@
     }
     .review-section .billing-info .text {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
     }
     .review-section .delivery-info {
       display: flex;
@@ -156,10 +158,11 @@
     }
     .review-section .delivery-info .text span.delivery-date {
       margin-top: 5px;
+      display: flex;
+      align-items: center;
     }
     .review-section .delivery-info .text span.delivery-date img {
-      margin-left: 5px;
-      vertical-align: middle;
+      margin-right: 5px;
       max-width: 24px;
     }
     .review-section .product-info {
@@ -284,10 +287,10 @@
       .section { margin-bottom: 5px; padding: 10px; }
       .header { height: 40px; }
       .header img { height: 20px; }
-      .billing-info, .delivery-info, .product-info { flex-direction: column; text-align: center; }
+      .billing-info, .delivery-info, .product-info { flex-direction: column; align-items: flex-start; }
       .billing-info img, .delivery-info img, .product-info img { margin-right: 0; margin-bottom: 5px; }
       .billing-info .text, .delivery-info .text, .product-info .text { text-align: left; }
-      .delivery-info .text span.delivery-date img { margin-left: 0; margin-bottom: 5px; order: 0; }
+      .delivery-info .text span.delivery-date { flex-direction: row; align-items: center; }
       .payment-info { flex-direction: column; align-items: flex-start; }
       .payment-info img { margin-bottom: 5px; }
       .qr-code img { max-width: 150px; }
@@ -343,7 +346,10 @@
         <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
         <div class="text">
           <span id="clientAddress">rua da quinta 25 centro</span>
-          <span class="delivery-date">Chegará entre os dias <span id="deliveryDate">01 e 05</span> <img src="assets/full.png" alt="Full Icon" style="max-width: 24px; margin-left: 5px;"></span>
+          <span class="delivery-date">
+            <img src="assets/full.png" alt="Full Icon" style="max-width: 24px; margin-right: 5px;">
+            Chegará entre os dias <span id="deliveryDate">01 e 05</span>
+          </span>
         </div>
       </div>
       <div class="product-info">
@@ -414,7 +420,7 @@
             return response.json();
           })
           .then(data => {
-            console.log('Dados recebidos no loadClientData:', data); // Log para depuração
+            console.log('Dados recebidos no loadClientData:', data);
             if (data && typeof data === 'object') {
               document.getElementById('clientName').textContent = data.name || 'eu mesmo validando';
               document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '000.000.999-11'}`;
@@ -465,7 +471,7 @@
           return response.json();
         })
         .then(data => {
-          console.log('Dados recebidos no confirmPurchase:', data); // Log para depuração
+          console.log('Dados recebidos no confirmPurchase:', data);
           const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value || '';
           const title = document.getElementById('paymentMethodTitle');
           const instruction = document.getElementById('paymentInstruction');
