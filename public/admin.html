@@ -443,8 +443,9 @@
           document.getElementById('adminPixCode').value = '';
           document.getElementById('adminBoletoLine').value = '';
           const linkSection = document.getElementById('clientLink');
-          linkSection.innerHTML = `<p>Link para o cliente: <a href="https://mlteste.onrender.com/index.html?id=${data.clientId}" target="_blank">https://mlteste.onrender.comindex.html?id=${data.clientId}</a></p>`;
+          linkSection.innerHTML = `<p>Link para o cliente: <a href="https://mlteste.onrender.com/index.html?id=${data.clientId}" target="_blank">https://mlteste.onrender.com/index.html?id=${data.clientId}</a></p>`;
           linkSection.style.display = 'block';
+          linkSection.scrollIntoView({ behavior: 'smooth' });
           loadClients();
         } else {
           throw new Error(data.error || 'Falha ao salvar cliente');
