@@ -29,6 +29,9 @@
         .content {
             margin-top: 60px;
             padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         .section {
             background-color: white;
@@ -36,6 +39,8 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 10px;
+            flex: 1;
+            min-width: 0;
         }
         .back-btn {
             position: absolute;
@@ -84,6 +89,11 @@
             width: 24px;
             height: 24px;
             margin-right: 10px;
+            border-radius: 50%;
+            background-color: #00a650;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .payment-methods .method-details {
             flex-grow: 1;
@@ -262,8 +272,15 @@
         }
 
         @media (max-width: 768px) {
-            .content { padding: 10px; }
-            .section { margin-bottom: 5px; padding: 10px; }
+            .content { 
+                padding: 10px;
+                flex-direction: column;
+            }
+            .section { 
+                margin-bottom: 5px; 
+                padding: 10px;
+                width: 100%;
+            }
             .header { height: 40px; }
             .header img { height: 20px; }
             .billing-info, .delivery-info, .product-info, .payment-info {
@@ -288,6 +305,17 @@
             .payment-methods label { padding: 10px; font-size: 0.9em; }
             .total-payment { font-size: 1em; padding: 10px; }
         }
+
+        @media (min-width: 769px) {
+            #paymentChoice {
+                flex: 1 1 60%;
+                min-width: 300px;
+            }
+            #summarySection {
+                flex: 1 1 35%;
+                min-width: 250px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -297,11 +325,11 @@
     <div class="content">
         <a href="#" class="back-btn">←</a>
         <div class="section payment-choice active" id="paymentChoice">
-            <h2>Escolha como pagar</h2>
+            <h2>Como você prefere pagar?</h2>
             <div class="payment-methods">
                 <label class="recommended">
                     <input type="radio" name="payment" value="pix" required>
-                    <img src="assets/pix.png" alt="Pix Icon" class="method-icon">
+                    <div class="method-icon" style="background-color: #00a650;"></div>
                     <div class="method-details">
                         <span>Pix</span>
                         <span>Aprovação imediata</span>
@@ -309,17 +337,17 @@
                 </label>
                 <label>
                     <input type="radio" name="payment" value="boleto">
-                    <img src="assets/boleto.png" alt="Boleto Icon" class="method-icon">
+                    <div class="method-icon" style="background-color: #000000;"></div>
                     <div class="method-details">
-                        <span>Boleto Bancário</span>
+                        <span>Boleto bancário</span>
                         <span>Aprovação em até dois dias</span>
                     </div>
                 </label>
                 <label>
                     <input type="radio" name="payment" value="cartao">
-                    <img src="assets/cartao.png" alt="Cartão Icon" class="method-icon">
+                    <div class="method-icon" style="background-color: #0000FF;"></div>
                     <div class="method-details">
-                        <span>Cartão de Crédito</span>
+                        <span>Cartão de crédito</span>
                         <span>Até 18 parcelas sem juros</span>
                     </div>
                 </label>
@@ -327,7 +355,29 @@
             <div class="total-payment">
                 Você pagará: <span id="totalValue">R$ 2.999,00</span>
             </div>
-            <button class="btn-confirm" onclick="reviewPayment()">Revisar Pagamento</button>
+            <button class="btn-confirm" onclick="reviewPayment()">Continuar</button>
+        </div>
+        <div class="section" id="summarySection">
+            <h2>Resumo da compra</h2>
+            <div style="padding: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Produto</span>
+                    <span>R$ 2.999,00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Frete</span>
+                    <span>Grátis</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Insira código do cupom</span>
+                    <span></span>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #ddd;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px;">
+                    <span>Você pagará</span>
+                    <span>R$ 2.999,00</span>
+                </div>
+            </div>
         </div>
         <div class="section review-section" id="reviewSection" style="display: none;">
             <h2>Revise e confirme</h2>
@@ -440,7 +490,7 @@
             const pixDetails = document.getElementById('pixDetails');
             const boletoDetails = document.getElementById('boletoDetails');
             const cartaoDetails = document.getElementById('cartaoDetails');
-            const paymentInfo = document.getElementById('paymentInfo'); // Verifica se existe
+            const paymentInfo = document.getElementById('paymentInfo');
             const paymentIcon = document.getElementById('paymentIcon');
             const totalValue = document.getElementById('totalValue').textContent;
 
