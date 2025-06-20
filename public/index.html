@@ -129,6 +129,17 @@
       padding: 10px;
       border-bottom: 1px solid #ddd;
     }
+    .review-section .billing-info {
+      display: flex;
+      align-items: flex-start;
+    }
+    .review-section .billing-info img {
+      max-width: 24px;
+      margin-right: 10px;
+    }
+    .review-section .billing-info .text {
+      flex-grow: 1;
+    }
     .review-section .delivery-info {
       display: flex;
       align-items: center;
@@ -273,11 +284,10 @@
       .section { margin-bottom: 5px; padding: 10px; }
       .header { height: 40px; }
       .header img { height: 20px; }
-      .delivery-info, .product-info { flex-direction: column; text-align: center; }
-      .delivery-info img, .product-info img { margin-right: 0; margin-bottom: 10px; }
-      .delivery-info .text span { flex-direction: column; align-items: flex-start; }
-      .delivery-info .text span.delivery-date img { margin-bottom: 5px; order: 0; }
-      .product-info .text { text-align: left; }
+      .billing-info, .delivery-info, .product-info { flex-direction: column; text-align: center; }
+      .billing-info img, .delivery-info img, .product-info img { margin-right: 0; margin-bottom: 5px; }
+      .billing-info .text, .delivery-info .text, .product-info .text { text-align: left; }
+      .delivery-info .text span.delivery-date img { margin-left: 0; margin-bottom: 5px; order: 0; }
       .payment-info { flex-direction: column; align-items: flex-start; }
       .payment-info img { margin-bottom: 5px; }
       .qr-code img { max-width: 150px; }
@@ -323,9 +333,12 @@
     <div class="section review-section" id="reviewSection" style="display: none;">
       <h2>Revise e confirme</h2>
       <div class="billing-info">
-        <img src="assets/faturamento.png" alt="Faturamento Icon" style="vertical-align: middle; max-width: 24px;">
-        <span id="clientName">eu mesmo validando</span>
-        <span id="clientCPF">CPF 000.000.999-</span>
+        <img src="assets/faturamento.png" alt="Faturamento Icon" style="max-width: 24px; margin-right: 10px;">
+        <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
+        <div class="text">
+          <span id="clientName">eu mesmo validando</span>
+          <span id="clientCPF">CPF 000.000.999-</span>
+        </div>
       </div>
       <div class="delivery-info">
         <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
