@@ -316,7 +316,7 @@
         </label>
       </div>
       <div class="total-payment">
-        Você pagará: <span id="totalValue">R$ 1.999,89</span>
+        Você pagará: <span id="totalValue">R$ 10,99</span>
       </div>
       <button class="btn-confirm" onclick="reviewPayment()">Revisar Pagamento</button>
     </div>
@@ -324,35 +324,35 @@
       <h2>Revise e confirme</h2>
       <div class="billing-info">
         <img src="assets/faturamento.png" alt="Faturamento Icon" style="vertical-align: middle; max-width: 24px;">
-        <span id="clientName">gael free</span>
-        <span id="clientCPF">CPF 4556790012</span>
+        <span id="clientName">eu mesmo validando</span>
+        <span id="clientCPF">CPF 000.000.999-</span>
       </div>
       <div class="delivery-info">
         <img src="assets/localizar.png" alt="Localizar Icon" style="max-width: 24px; margin-right: 10px;">
         <div class="text">
-          <span id="clientAddress">testeim rua de teste Entrega no endereco</span>
-          <span class="delivery-date">Chegará entre os dias <span id="deliveryDate"></span> <img src="assets/full.png" alt="Full Icon" style="max-width: 24px; margin-left: 5px;"></span>
+          <span id="clientAddress">rua da quinta 25 centro</span>
+          <span class="delivery-date">Chegará entre os dias <span id="deliveryDate">01 e 05</span> <img src="assets/full.png" alt="Full Icon" style="max-width: 24px; margin-left: 5px;"></span>
         </div>
       </div>
       <div class="product-info">
         <img id="productPhotoReview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Product Icon" style="max-width: 50px; margin-right: 10px;">
         <div class="text">
-          <p id="productNameReview">Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V</p>
+          <p id="productNameReview">Parafusadeira Furadeira De Impacto 2 Bateria 21V Bivolt</p>
           <p>Quantidade: 1</p>
         </div>
         <div class="payment-icon" id="paymentIcon"></div>
       </div>
       <div class="payment-info" id="paymentInfo">
         <span></span>
-        <span id="paymentValue">R$ 1.999,89</span>
+        <span id="paymentValue">R$ 10,99</span>
       </div>
       <div class="total">
-        Total: <span id="totalValueReview">R$ 1.999,89</span>
+        Total: <span id="totalValueReview">R$ 10,99</span>
       </div>
       <button class="btn-confirm" onclick="confirmPurchase()">Confirmar a compra</button>
     </div>
     <div class="section payment-section" id="paymentSection">
-      <h2 id="paymentMethodTitle">Pague R$ 1.999,89 via [Método] para garantir sua compra</h2>
+      <h2 id="paymentMethodTitle">Pague R$ 10,99 via [Método] para garantir sua compra</h2>
       <div class="payment-box">
         <p id="paymentInstruction">Escaneie este código QR ou copie o código abaixo para pagar</p>
         <div class="qr-code" id="qrCodeContainer">
@@ -374,7 +374,7 @@
           <p>Após pagamento, a aprovação ocorre em 1 a 2 dias úteis.</p>
         </div>
         <p><i>Pague e será creditado na hora</i></p>
-        <p>Pague até 08:21 PM -04 de quinta-feira, 19 de junho de 2025.</p>
+        <p>Pague até 11:43 PM -04 de quinta-feira, 19 de junho de 2025.</p>
         <p><i>Pague agora para garantir sua compra</i></p>
       </div>
     </div>
@@ -404,17 +404,17 @@
           .then(data => {
             console.log('Dados recebidos no loadClientData:', data); // Log para depuração
             if (data && typeof data === 'object') {
-              document.getElementById('productPhotoReview').src = data.productPhoto ? `data:image/png;base64,${data.productPhoto}` : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
-              document.getElementById('productNameReview').textContent = data.productName || 'Parafusadeira E Fureadeira Impacto The Black Tools Tb-21wp 21V 3.8V';
-              document.getElementById('clientName').textContent = data.name || 'gael free';
-              document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '4556790012'}`;
-              document.getElementById('clientAddress').textContent = data.address || 'testeim rua de teste Entrega no endereco';
-              const total = data.total.replace('.', ',') || '1.999,89';
+              document.getElementById('clientName').textContent = data.name || 'eu mesmo validando';
+              document.getElementById('clientCPF').textContent = `CPF ${data.cpf || '000.000.999-'}`;
+              document.getElementById('clientAddress').textContent = data.address || 'rua da quinta 25 centro';
+              const total = data.total.replace('.', ',') || '10,99';
               document.getElementById('totalValue').textContent = `R$ ${total}`;
               document.getElementById('totalValueReview').textContent = `R$ ${total}`;
               document.getElementById('paymentValue').textContent = `R$ ${total}`;
-              const deliveryDays = data.deliveryDate || '08, 10';
-              document.getElementById('deliveryDate').textContent = deliveryDays.replace(',', ' e ');
+              const deliveryDays = data.deliveryDate || '01 e 05';
+              document.getElementById('deliveryDate').textContent = deliveryDays;
+              document.getElementById('productPhotoReview').src = data.productPhoto ? `data:image/png;base64,${data.productPhoto}` : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+              document.getElementById('productNameReview').textContent = data.productName || 'Parafusadeira Furadeira De Impacto 2 Bateria 21V Bivolt';
               if (data.qrCode) {
                 document.getElementById('qrCodeImg').src = `data:image/png;base64,${data.qrCode}`;
               }
@@ -473,7 +473,7 @@
             pixDetails.style.display = 'block';
             boletoDetails.style.display = 'none';
             pixCodeElement.value = data.pixCode || '';
-            paymentInfo.innerHTML = `<img src="assets/pix.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">R$ 1.999,89</span>`;
+            paymentInfo.innerHTML = `<img src="assets/pix.png" alt="Pix Icon" style="max-width: 24px; margin-right: 10px;">Pix <span id="paymentValue">R$ ${totalValue}</span>`;
             paymentIcon.innerHTML = '';
           } else if (selectedPayment === 'boleto') {
             title.textContent = `Pague ${totalValue} via Boleto para garantir sua compra`;
@@ -482,7 +482,7 @@
             pixDetails.style.display = 'none';
             boletoDetails.style.display = 'block';
             boletoLineElement.value = data.boletoLine || '83640000001234567890123456789012345678901234567890';
-            paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">R$ 1.999,89</span>`;
+            paymentInfo.innerHTML = `<img src="assets/boleto.png" alt="Boleto Icon" style="max-width: 24px; margin-right: 10px;">Boleto <span id="paymentValue">R$ ${totalValue}</span>`;
             paymentIcon.innerHTML = '';
           } else {
             console.error('Método de pagamento não selecionado');
