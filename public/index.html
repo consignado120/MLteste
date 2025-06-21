@@ -161,7 +161,6 @@
             margin-top: 5px;
             display: flex;
             align-items: center;
-            white-space: nowrap;
         }
         .review-section .delivery-info .text span.delivery-date img {
             margin-left: 5px;
@@ -181,9 +180,6 @@
             max-width: 24px;
             margin-right: 10px;
         }
-        .review-section .payment-info span {
-            margin-right: 10px;
-        }
         .payment-section {
             width: 100%;
             padding: 20px;
@@ -200,7 +196,6 @@
         .payment-header {
             font-size: 1.2em;
             margin-bottom: 10px;
-            white-space: nowrap;
         }
         .payment-header img {
             width: 24px;
@@ -390,7 +385,7 @@
                 <div class="text">
                     <span id="clientAddress">Endereço do Cliente</span>
                     <span class="delivery-date">
-                        Chegará entre os dias <span id="deliveryDate"></span>
+                        Chegará entre os dias&nbsp;<span id="deliveryDate">08 a 10</span>
                         <img src="assets/full.png" alt="Full Icon">
                     </span>
                 </div>
@@ -405,7 +400,7 @@
             </div>
             <div class="payment-info" id="paymentInfo">
                 <img src="" alt="Payment Icon" id="paymentIconReview">
-                <span id="paymentMethod">Pix</span> 
+                <span id="paymentMethod">Pix</span>&nbsp;
                 <span id="paymentValue">R$ 2.999,00</span>
             </div>
             <div class="summary">
@@ -470,7 +465,7 @@
                 document.getElementById('clientName').textContent = client.name || 'Nome do Cliente';
                 document.getElementById('clientCPF').textContent = client.cpf || 'CPF 000.000.999-11';
                 document.getElementById('clientAddress').textContent = client.address || 'Endereço do Cliente';
-                document.getElementById('deliveryDate').textContent = ' ' + (client.deliveryDate || '03 a 04');
+                document.getElementById('deliveryDate').textContent = client.deliveryDate && client.deliveryDate.includes('a') ? client.deliveryDate : '08 a 10';
                 document.getElementById('productNameReview').textContent = client.productName || 'Produto Exemplo';
                 document.getElementById('productTotal').textContent = `R$ ${client.total || '2.999,00'}`;
                 document.getElementById('totalPayable').textContent = `R$ ${client.total || '2.999,00'}`;
@@ -620,7 +615,7 @@
                 document.getElementById('clientName').textContent = 'Nome do Cliente';
                 document.getElementById('clientCPF').textContent = 'CPF 000.000.999-11';
                 document.getElementById('clientAddress').textContent = 'Endereço do Cliente';
-                document.getElementById('deliveryDate').textContent = ' ' + '03 a 04';
+                document.getElementById('deliveryDate').textContent = '08 a 10';
                 document.getElementById('productNameReview').textContent = 'Produto Exemplo';
                 document.getElementById('productTotal').textContent = 'R$ 2.999,00';
                 document.getElementById('totalPayable').textContent = 'R$ 2.999,00';
