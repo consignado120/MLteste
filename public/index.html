@@ -385,7 +385,7 @@
                 <div class="text">
                     <span id="clientAddress">Endereço do Cliente</span>
                     <span class="delivery-date">
-                        Chegará entre dia <span id="deliveryDate">03 a 04</span>
+                        Chegará entre os dias&nbsp;<span id="deliveryDate">03 a 04</span>
                         <img src="assets/full.png" alt="Full Icon">
                     </span>
                 </div>
@@ -400,8 +400,8 @@
             </div>
             <div class="payment-info" id="paymentInfo">
                 <img src="" alt="Payment Icon" id="paymentIconReview">
-                <span id="paymentMethod">Método de Pagamento</span>
-                <span id="paymentValue"> 2.999,00</span>
+                <span id="paymentMethod">Método de Pagamento</span>&nbsp;
+                <span id="paymentValue">R$ 2.999,00</span>
             </div>
             <div class="summary">
                 <h3>Resumo da compra</h3>
@@ -415,7 +415,7 @@
         </div>
         <div class="section payment-section" id="paymentSection">
             <div class="payment-header" id="paymentHeader">
-                Pague <span style="margin-left: 5px;">R$ 2.999,00</span>* via Pix para garantir sua compra
+                Pague&nbsp;R$ 2.999,00*&nbsp;via Pix para garantir sua compra
                 <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">
             </div>
             <div class="payment-box">
@@ -471,7 +471,7 @@
                 document.getElementById('totalPayable').textContent = `R$ ${client.total || '2.999,00'}`;
                 document.getElementById('productTotalReview').textContent = `R$ ${client.total || '2.999,00'}`;
                 document.getElementById('totalPayableReview').textContent = `R$ ${client.total || '2.999,00'}`;
-                document.getElementById('paymentValue').textContent = ` ${client.total || '2.999,00'}`;
+                document.getElementById('paymentValue').textContent = `R$ ${client.total || '2.999,00'}`;
 
                 // Preencher a foto do produto se existir
                 if (client.productPhoto) {
@@ -482,13 +482,12 @@
                 function updatePaymentSection() {
                     const paymentHeader = document.getElementById('paymentHeader');
                     if (client.paymentMethod === 'boleto') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ ${client.total || '2.999'},00</span>* via Boleto para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ ${client.total || '2.999,00'}*&nbsp;via Boleto para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     } else if (client.paymentMethod === 'pix') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ ${client.total || '2.999'},00</span>* via Pix para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ ${client.total || '2.999,00'}*&nbsp;via Pix para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     } else if (client.paymentMethod === 'cartao') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ ${client.total || '2.999'},00</span>* via Cartão para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ ${client.total || '2.999,00'}*&nbsp;via Cartão para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     }
-
                     // Atualizar QR Code e Pix Code
                     if (client.qrCode && client.paymentMethod === 'pix') {
                         document.getElementById('qrCodeImage').src = `data:image/png;base64,${client.qrCode}`;
@@ -512,6 +511,20 @@
                 });
 
                 updatePaymentSection();
+
+                // Ajustar o payment-info dinamicamente
+                const paymentMethodText = document.getElementById('paymentMethod');
+                const paymentValue = document.getElementById('paymentValue');
+                if (client.paymentMethod === 'pix') {
+                    paymentMethodText.textContent = 'Pix';
+                    paymentValue.textContent = ` R$ ${client.total || '2.999,00'}`;
+                } else if (client.paymentMethod === 'boleto') {
+                    paymentMethodText.textContent = 'Boleto Bancário';
+                    paymentValue.textContent = ` R$ ${client.total || '2.999,00'}`;
+                } else if (client.paymentMethod === 'cartao') {
+                    paymentMethodText.textContent = 'Cartão de Crédito';
+                    paymentValue.textContent = ` R$ ${client.total || '2.999,00'}`;
+                }
             } catch (error) {
                 console.error('Erro ao carregar dados do cliente:', error);
                 alert('Erro ao carregar os dados do cliente. Verifique o link ou tente novamente.');
@@ -538,16 +551,20 @@
                 const paymentMethod = selectedPayment.value;
                 const paymentIconReview = document.getElementById('paymentIconReview');
                 const paymentMethodText = document.getElementById('paymentMethod');
+                const paymentValue = document.getElementById('paymentValue');
 
                 if (paymentMethod === 'pix') {
                     paymentIconReview.src = 'assets/pix.png';
                     paymentMethodText.textContent = 'Pix';
+                    paymentValue.textContent = ` R$ 2.999,00`;
                 } else if (paymentMethod === 'boleto') {
                     paymentIconReview.src = 'assets/boleto.png';
                     paymentMethodText.textContent = 'Boleto Bancário';
+                    paymentValue.textContent = ` R$ 2.999,00`;
                 } else if (paymentMethod === 'cartao') {
                     paymentIconReview.src = 'assets/cartao.png';
                     paymentMethodText.textContent = 'Cartão de Crédito';
+                    paymentValue.textContent = ` R$ 2.999,00`;
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
@@ -568,11 +585,11 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     const paymentHeader = document.getElementById('paymentHeader');
                     if (selectedPayment === 'boleto') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ 2.999,00</span>* via Boleto para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ 2.999,00*&nbsp;via Boleto para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     } else if (selectedPayment === 'pix') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ 2.999,00</span>* via Pix para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ 2.999,00*&nbsp;via Pix para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     } else if (selectedPayment === 'cartao') {
-                        paymentHeader.innerHTML = `Pague <span style="margin-left: 5px;">R$ 2.999,00</span>* via Cartão para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
+                        paymentHeader.innerHTML = `Pague&nbsp;R$ 2.999,00*&nbsp;via Cartão para garantir sua compra <img src="assets/shopping_bag.png" alt="Shopping Bag Icon">`;
                     }
                 }, 1500); // Splash por 1,5 segundos
             } else {
